@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.galactic_messenger.Services.Test;
 
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 public class UserController {
 
@@ -18,6 +18,7 @@ public class UserController {
   // public UserController() {
   //   // Initialisation par défaut, par exemple, vous pouvez instancier un UserRepository ici si nécessaire.
   // }
+  
 
   @PostMapping("/register")
   public void register(String name, String password){
