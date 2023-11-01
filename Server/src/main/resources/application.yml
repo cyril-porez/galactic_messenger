@@ -6,11 +6,11 @@ spring:
     password: admin
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-
-  # security:
-  #   user:
-  #     name: admin
-  #     password: admin
-
   h2:
-    console.enabled: true
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    user:
+      name: admin
+      password: admin

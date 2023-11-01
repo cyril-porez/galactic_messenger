@@ -21,15 +21,20 @@ public class Test {
 
   }
 
-  public void registerUser(String name, String password){
+  public String registerUser(String name, String password){
+     String str = "";
     if (userExists(name)){
+      str = "Ce nom existe déjà";
+      System.out.println("user exist");
+    } else { 
       Users user = new Users(name, hashPassword(password));
       repo.save(user);
       repo.flush();
-      System.out.println("Bienvenue " + name + " ! Tu est bien inscrit");
-    } else {
-      System.out.println("Ce nom existe déja");
+      str = "Inscription réussie";     
+      System.out.println("user création");
     }
+
+    return str;
   }
 
 
@@ -53,10 +58,11 @@ public class Test {
   }
 
   private boolean userExists(String name) {
-    if (repo.findByName(name) != null){
-      return false;
+    boolean isFind = true;
+    if (repo.findByName(name) == null){
+      isFind = false;
     }
-    return true;
+    return isFind;
   }
 
 }

@@ -1,7 +1,10 @@
 package com.example.galactic_messenger.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.galactic_messenger.Services.Test;
@@ -21,8 +24,28 @@ public class UserController {
   
 
   @PostMapping("/register")
-  public void register(String name, String password){
-    this.service.registerUser(name, password);
+  public ResponseEntity<ApiResponse> register(@RequestParam String name, @RequestParam String password){
+    String result = service.registerUser(name, password);
+    ApiResponse response = new ApiResponse();
+
+    if (result.equals("Inscription réussie")) {
+      response.setStatus("sucess");
+      response.setMessage("Requete réussie");
+      response.setData(name); 
+      return ResponseEntity.ok(response);    
+    } 
+    else if (result.equals("Ce nom existe déjà")) {
+      response.setStatus("error");
+      response.setMessage("Les identifiants sont déjà utilisées");
+      response.setData(null);  
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);    
+    } else {
+      response.setStatus("test");
+      response.setMessage("test");
+      response.setData("test"); 
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+     
   }
 
   @PostMapping("/login")
