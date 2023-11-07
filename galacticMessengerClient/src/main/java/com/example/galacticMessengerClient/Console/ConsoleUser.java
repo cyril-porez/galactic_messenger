@@ -3,6 +3,8 @@ package com.example.galacticMessengerClient.Console;
 // import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.example.galacticMessengerClient.Request.RequestApi;
 
 public class ConsoleUser {
@@ -52,6 +54,8 @@ public class ConsoleUser {
 		  String choiceCommand = commandSplit[0];
 			switch (choiceCommand) {
 				case "/register":
+					hashPassword(commandSplit[2]);
+					System.out.println(commandSplit[2]);
 					requestApi.request(commandSplit[1], commandSplit[2], adressServer, commandSplit[0]);
 					break;
 				case "/login":
@@ -71,5 +75,8 @@ public class ConsoleUser {
 		scanner.close();
   }
 
+  public String hashPassword(String password){
+	return new BCryptPasswordEncoder().encode(password);
+  }
 
 }
