@@ -33,4 +33,5 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.security:spring-security-crypto'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
 }

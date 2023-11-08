@@ -6,6 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -37,12 +41,29 @@ public class SecurityConfig {
               .requestMatchers("api/user/register").permitAll()
               .requestMatchers("api/user/login").permitAll()
               .anyRequest().authenticated())
-            // .httpBasic(httpBasic -> httpBasic
-            //   .authenticationEntryPoint(authEntryPoint))
+            .httpBasic(httpBasic -> httpBasic
+              .authenticationEntryPoint(authEntryPoint))
             .headers(headers -> headers.disable());
-    // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+     http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
+  }
+
+  @Bean
+  public UserDetailsService users() {
+    UserDetails admin = User.builder()
+      .username("admin")
+      .password("password")
+      .roles("ADMIN")
+      .build();
+
+      UserDetails user = User.builder()
+      .username("test")
+      .password("test")
+      .roles("USER")
+      .build();
+
+    return new InMemoryUserDetailsManager(admin, user);
   }
 
   @Bean

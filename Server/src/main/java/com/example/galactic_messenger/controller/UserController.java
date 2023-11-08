@@ -1,5 +1,6 @@
 package com.example.galactic_messenger.controller;
 
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.galactic_messenger.Services.Test;
+import com.example.galactic_messenger.security.JwtGenerator;
 
 @RequestMapping("/api/user")
 @RestController
@@ -56,6 +58,8 @@ public class UserController {
       response.setStatus("sucess");
       response.setMessage("Vous vous êtes connecté avec succès !");
       response.setData(name);
+      // Authentication authentication = authenticationManager();
+      // String token = JwtGenerator.generateToken(); 
       return ResponseEntity.ok(response); 
     } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
       response.setStatus("error");
