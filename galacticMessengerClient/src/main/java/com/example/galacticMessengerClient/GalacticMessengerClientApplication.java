@@ -14,19 +14,22 @@ public class GalacticMessengerClientApplication {
         SpringApplication.run(GalacticMessengerClientApplication.class, args);
 
         if (checkArgs(args)) {
-            ConsoleUser consoleUser = new ConsoleUser();
-            consoleUser.displayLaunchInstruction();
-
-            consoleUser.ConsoleUseGalacticMessenger(args);
+            try {
+                ConsoleUser consoleUser = new ConsoleUser(args);
+                consoleUser.ConsoleUseGalacticMessenger();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 
     private static boolean checkArgs(String[] args) {
         if (args.length == 2) {
             // regex basé sur le format de port
-            String portPattern = "^\\d{4}$";
+            String portPattern = "^[0-9]{4}$";
             // vérification de la validité de l'adresse ip par rapport au numéro de port
-            Matcher matcherPort = Pattern.compile(portPattern).matcher(args[1]);
+            Pattern pattern = Pattern.compile(portPattern);
+            Matcher matcherPort = pattern.matcher(args[1]);
             // vérifie l'ip et le port
             if (checkIpFormat(args[0]) && matcherPort.matches()) {
                 System.out.println("\nAdresse et numero de port valides\nBienvenue !\n");
@@ -66,4 +69,8 @@ public class GalacticMessengerClientApplication {
 
         return false;
     }
+
+    // private static boolean checkPortFormat(String port) {
+
+    // }
 }
