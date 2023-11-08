@@ -20,7 +20,6 @@ public class GalacticMessengerClientApplication {
             try {
                 ConsoleUser consoleUser = new ConsoleUser();
                 consoleUser.ConsoleUseGalacticMessenger(args);
-                
             } catch (Exception e) {
                 System.out.println("CA MARCHE PAS!");
                 System.exit(0);
@@ -42,12 +41,13 @@ public class GalacticMessengerClientApplication {
             else {
                 System.out.println("\nAdresse et numero de port invalides !\n\n");
                 System.exit(0);
+                return false;
             }
         } else {
             System.out.printf("\nNombre d'arguments invalides : 2 attendus, %d recus\n\n", args.length);
             System.exit(0);
+            return false;
         }
-        return false;
     }
 
     private static boolean checkIpFormat(String ip) {
@@ -65,10 +65,13 @@ public class GalacticMessengerClientApplication {
                         if(!Character.isDigit(o)) {
                             return false;
                         }
+
                         return true;
                     }
                 }
             }
+
+            return false;
         }
 
         return false;

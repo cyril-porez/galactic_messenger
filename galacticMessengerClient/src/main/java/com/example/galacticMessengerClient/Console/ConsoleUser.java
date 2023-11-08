@@ -41,8 +41,8 @@ public class ConsoleUser {
 
 	public void ConsoleUseGalacticMessenger(String[] args) {
 		RequestApi requestApi = new RequestApi();
-		String addressIp = args[1];
-		String port = args[2];
+		String addressIp = args[0];
+		String port = args[1];
         
         String adressServer = addressIp + ":" + port;
 		Scanner scanner = new Scanner(System.in);
