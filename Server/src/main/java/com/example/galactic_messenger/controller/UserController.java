@@ -30,7 +30,7 @@ public class UserController {
 
     if (result.equals("Inscription réussie")) {
       response.setStatus("sucess");
-      response.setMessage("Requete réussie");
+      response.setMessage("Vous êtes inscrits !");
       response.setData(name); 
       return ResponseEntity.ok(response);    
     } 
@@ -48,9 +48,25 @@ public class UserController {
      
   }
 
-  // @PostMapping("/login")
-  // public ResponseEntity<ApiResponse> login(@RequestParam String name, @RequestParam String password){
-  //   String result = service.userlogin(name, password);
-  //   this.service.userlogin(name, password);
-  // }
+  @PostMapping("/login")
+  public ResponseEntity<ApiResponse> login(@RequestParam String name, @RequestParam String password){
+    String result = service.userlogin(name, password); 
+    ApiResponse response = new ApiResponse();
+    if (result.equals("Vous êtes connectées !")){
+      response.setStatus("sucess");
+      response.setMessage("Vous vous êtes connecté avec succès !");
+      response.setData(name);
+      return ResponseEntity.ok(response); 
+    } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
+      response.setStatus("error");
+      response.setMessage("Les identifiants sont incorects");
+      response.setData(null);  
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);      
+    } else {
+      response.setStatus("test");
+      response.setMessage("Ces identifiants n'existent pas ");
+      response.setData("test");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+  }
 }

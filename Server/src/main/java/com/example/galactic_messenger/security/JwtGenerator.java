@@ -10,7 +10,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
-import com.example.galactic_messenger.security.SecurityConstant;
 @Component
 public class JwtGenerator {
   public String generateToken(Authentication authentication) {

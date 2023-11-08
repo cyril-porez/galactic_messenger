@@ -35,11 +35,12 @@ public class SecurityConfig {
 	          .authorizeHttpRequests(authorize -> authorize            
               .requestMatchers("/h2-console/**").permitAll()
               .requestMatchers("api/user/register").permitAll()
+              .requestMatchers("api/user/login").permitAll()
               .anyRequest().authenticated())
-            .httpBasic(httpBasic -> httpBasic
-              .authenticationEntryPoint(authEntryPoint))
+            // .httpBasic(httpBasic -> httpBasic
+            //   .authenticationEntryPoint(authEntryPoint))
             .headers(headers -> headers.disable());
-    http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
   }
