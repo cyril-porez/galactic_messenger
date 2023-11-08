@@ -3,6 +3,7 @@ package com.example.galacticMessengerClient.Console;
 // import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
 
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.galacticMessengerClient.Request.RequestApi;
@@ -40,9 +41,12 @@ public class ConsoleUser {
 
 	public void ConsoleUseGalacticMessenger(String[] args) {
 		RequestApi requestApi = new RequestApi();
-		String addressIp = args[0];
-		String port = args[1];
-		String adressServer = addressIp + ":" + port;
+		String addressIp = args[1];
+		String port = args[2];
+        
+        
+        
+        String adressServer = addressIp + ":" + port;
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Veuillez entrer votre commande!");
 
