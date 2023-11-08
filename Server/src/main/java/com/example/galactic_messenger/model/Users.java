@@ -13,6 +13,9 @@ public class Users {
   private long id;
   public String name;
   public String password;
+  
+  private boolean isConnected;
+  
 
   public Users(String name, String password) {
     this.name = name;
