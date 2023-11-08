@@ -14,3 +14,7 @@ spring:
     user:
       name: admin
       password: admin
+  # spring:
+  # jwt:
+  #   secret: aazfgsdfhjtfurdtgcxb
+  #   expiration: 3600

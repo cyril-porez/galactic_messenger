@@ -21,12 +21,14 @@ dependencies {
 	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	// implementation 'org.springframework.cloud:spring-cloud-starter-config:4.0.4'
-    // implementation 'org.springframework.cloud:spring-cloud-config-client:4.0.4'
-    // implementation 'org.springframework.cloud:spring-cloud-config-server:4.0.4'
+  // implementation 'org.springframework.cloud:spring-cloud-config-client:4.0.4'
+  // implementation 'org.springframework.cloud:spring-cloud-config-server:4.0.4'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

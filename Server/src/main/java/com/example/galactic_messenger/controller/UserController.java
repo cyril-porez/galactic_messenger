@@ -48,8 +48,9 @@ public class UserController {
      
   }
 
-  @PostMapping("/login")
-  public void login(String name, String password){
-    this.service.userlogin(name, password);
-  }
+  // @PostMapping("/login")
+  // public ResponseEntity<ApiResponse> login(@RequestParam String name, @RequestParam String password){
+  //   String result = service.userlogin(name, password);
+  //   this.service.userlogin(name, password);
+  // }
 }
