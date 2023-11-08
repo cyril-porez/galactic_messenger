@@ -5,7 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.galacticMessengerClient.Console.ConsoleUser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.IOException;
 import java.lang.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @SpringBootApplication
 public class GalacticMessengerClientApplication {
@@ -14,10 +17,14 @@ public class GalacticMessengerClientApplication {
         SpringApplication.run(GalacticMessengerClientApplication.class, args);
 
         if (checkArgs(args)) {
-            ConsoleUser consoleUser = new ConsoleUser();
-            consoleUser.displayLaunchInstruction();
-
-            consoleUser.ConsoleUseGalacticMessenger(args);
+            try {
+                ConsoleUser consoleUser = new ConsoleUser();
+                consoleUser.ConsoleUseGalacticMessenger(args);
+                
+            } catch (Exception e) {
+                System.out.println("CA MARCHE PAS!");
+                System.exit(0);
+            }
         }
     }
 
@@ -29,7 +36,7 @@ public class GalacticMessengerClientApplication {
             Matcher matcherPort = Pattern.compile(portPattern).matcher(args[1]);
             // vérifie l'ip et le port
             if (checkIpFormat(args[0]) && matcherPort.matches()) {
-                System.out.println("\nAdresse et numero de port valides\nBienvenue !\n");
+                System.out.println("\nAdresse et numero de port valides\n\n");
                 return true;
             }
             else {
@@ -66,4 +73,5 @@ public class GalacticMessengerClientApplication {
 
         return false;
     }
+
 }

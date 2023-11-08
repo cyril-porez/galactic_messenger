@@ -44,10 +44,11 @@ public class ConsoleUser {
 		String addressIp = args[1];
 		String port = args[2];
         
-        
-        
         String adressServer = addressIp + ":" + port;
 		Scanner scanner = new Scanner(System.in);
+
+        displayLaunchInstruction();
+
 		System.out.println("Veuillez entrer votre commande!");
 
 		boolean isRunning = true;
