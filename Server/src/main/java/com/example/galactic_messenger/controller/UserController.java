@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.galactic_messenger.Services.Test;
+import com.example.galactic_messenger.model.Users;
 
 @RequestMapping("/api/user")
 @RestController
@@ -28,18 +29,20 @@ public class UserController {
   @PostMapping("/register")
   public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestParam String name, @RequestParam String password) {
     return service.registerUser(name, password)
-            .thenApply(result -> {
+            .handle((result, ex) -> {
                 ApiResponse response = new ApiResponse();
 
                 if (result.equals("Inscription réussie")) {
                     response.setStatus("success");
                     response.setMessage("Requête réussie");
-                    response.setData(name);
-                    return ResponseEntity.ok(response);
+                    Users user = new Users(name, password);
+                    response.setData(user);
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
                 } else if (result.equals("Ce nom existe déjà")) {
                     response.setStatus("error");
                     response.setMessage("Les identifiants sont déjà utilisés");
                     response.setData(null);
+                    System.out.println(response);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
                 } else {
                     response.setStatus("test");
