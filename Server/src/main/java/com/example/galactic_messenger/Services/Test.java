@@ -43,7 +43,7 @@ public class Test {
   }
 
   public String userlogin(String name, String password){
-    Users user = repo.findByName(name);
+    Users user = repo.findByName(name).orElse(null);
     String str = "";
     if(user != null && new BCryptPasswordEncoder().matches(password, user.getPassword())){
       str = "Vous êtes connectées !" ;
