@@ -48,15 +48,15 @@ public class Test {
     repo.deleteById(id);
   }
 
-  public void userlogin(String name, String password){
+  public String userlogin(String name, String password){
     Users user = repo.findByName(name);
-
+    String str = "";
     if(user != null && new BCryptPasswordEncoder().matches(password, user.getPassword())){
-      System.out.println("Bonjour " + name + " vous êtes connecté");
+      str = "Vous êtes connectées !" ;
     } else{
-      System.out.println("Nom d'utilisateur ou mot de passe incorrect");
+      str = "Nom d'utilisateur ou mot de passe incorrect";
     }
-
+    return str;
   }
 
   private String hashPassword(String password) {

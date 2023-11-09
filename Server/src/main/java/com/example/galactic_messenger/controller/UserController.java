@@ -54,7 +54,26 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public void login(String name, String password){
-    this.service.userlogin(name, password);
+  public  ResponseEntity<ApiResponse> login(String name, String password){
+    String result = service.userlogin(name, password); 
+    ApiResponse response = new ApiResponse();
+    if (result.equals("Vous êtes connectées !")){
+      response.setStatus("sucess");
+      response.setMessage("Vous vous êtes connecté avec succès !");
+      response.setData(name);
+      // Authentication authentication = authenticationManager();
+      // String token = JwtGenerator.generateToken(); 
+      return ResponseEntity.ok(response); 
+    } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
+      response.setStatus("error");
+      response.setMessage("Les identifiants sont incorects");
+      response.setData(null);  
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);      
+    } else {
+      response.setStatus("test");
+      response.setMessage("Ces identifiants n'existent pas ");
+      response.setData("test");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
   }
 }
