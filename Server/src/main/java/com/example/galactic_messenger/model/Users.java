@@ -47,4 +47,11 @@ public class Users {
     this.password = password;
   }
   
+  public boolean getIsConnected() {
+    return this.isConnected;
+  }
+
+  public void setIsConnected(boolean isConnected) {
+    this.isConnected = isConnected;
+  }
 }
