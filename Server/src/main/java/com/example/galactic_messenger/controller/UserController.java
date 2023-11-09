@@ -1,5 +1,7 @@
 package com.example.galactic_messenger.controller;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,28 +26,28 @@ public class UserController {
   
 
   @PostMapping("/register")
-  public ResponseEntity<ApiResponse> register(@RequestParam String name, @RequestParam String password){
-    String result = service.registerUser(name, password);
-    ApiResponse response = new ApiResponse();
+  public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestParam String name, @RequestParam String password) {
+    return service.registerUser(name, password)
+            .thenApply(result -> {
+                ApiResponse response = new ApiResponse();
 
-    if (result.equals("Inscription réussie")) {
-      response.setStatus("sucess");
-      response.setMessage("Requete réussie");
-      response.setData(name); 
-      return ResponseEntity.ok(response);    
-    } 
-    else if (result.equals("Ce nom existe déjà")) {
-      response.setStatus("error");
-      response.setMessage("Les identifiants sont déjà utilisées");
-      response.setData(null);  
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);    
-    } else {
-      response.setStatus("test");
-      response.setMessage("test");
-      response.setData("test"); 
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-     
+                if (result.equals("Inscription réussie")) {
+                    response.setStatus("success");
+                    response.setMessage("Requête réussie");
+                    response.setData(name);
+                    return ResponseEntity.ok(response);
+                } else if (result.equals("Ce nom existe déjà")) {
+                    response.setStatus("error");
+                    response.setMessage("Les identifiants sont déjà utilisés");
+                    response.setData(null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                } else {
+                    response.setStatus("test");
+                    response.setMessage("test");
+                    response.setData("test");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                }
+            });
   }
 
   @PostMapping("/login")
