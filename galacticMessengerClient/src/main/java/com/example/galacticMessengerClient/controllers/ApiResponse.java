@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.controller;
+package com.example.galacticMessengerClient.controllers;
 
 public class ApiResponse {
   private String status;

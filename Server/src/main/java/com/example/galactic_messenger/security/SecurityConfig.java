@@ -86,8 +86,8 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
-  public JWTAuthenticationFilter jwtAuthenticationFilter() {
-    return new JWTAuthenticationFilter();
-  }
+  // @Bean
+  // public JWTAuthenticationFilter jwtAuthenticationFilter() {
+  //   return new JWTAuthenticationFilter();
+  // }
 }

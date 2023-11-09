@@ -8,6 +8,7 @@ import java.util.Scanner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.galacticMessengerClient.Request.RequestApi;
+import com.example.galacticMessengerClient.controllers.ApiResponse;
 
 public class ConsoleUser {
 
@@ -84,7 +85,8 @@ public class ConsoleUser {
 
     public void handleRegister(String[] commands, String choiceCommand) {
         if(commands.length == 3) {
-            requestApi.request(commands[1], hashPassword(commands[2]), adressServer, choiceCommand);
+            ApiResponse res = requestApi.request(commands[1], hashPassword(commands[2]), adressServer, choiceCommand);
+            System.out.println(res.getMessage());
         }
         else {
             System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
