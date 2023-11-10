@@ -69,7 +69,6 @@ public class ConsoleUser {
                 case "/login":
                     System.out.println("/login");
                     handleRegister(commandSplit, choiceCommand);
-                    // request(commandSplit[1], commandSplit[2], adressServer, commandSplit[0]);
                     break;
                 case "/help":
                     help();
