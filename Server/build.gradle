@@ -34,6 +34,12 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-crypto'
 }
 
+bootJar {
+    archiveFileName = 'galactic_messenger_server.jar'
+    mainClass = 'com.example.galactic_messenger.GalacticMessengerApplication'
+    destinationDirectory = file('../')
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
