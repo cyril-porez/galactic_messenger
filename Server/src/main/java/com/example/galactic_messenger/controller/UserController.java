@@ -48,6 +48,7 @@ public class UserController {
                         JSONObject data = new JSONObject();
                         data.put("name", name);
                         data.put("password", password);
+                        response.setData(data);
 
                         return ResponseEntity.status(HttpStatus.OK).body(response);
                     } else if (result.equals("Ce nom existe déjà")) {
@@ -79,7 +80,6 @@ public class UserController {
                         JSONObject data = new JSONObject();
                         data.put("id", u.getId());
                         data.put("name", u.getName());
-                        // data.put("password", u.getPassword());
 
                         response.setData(data);
                         return ResponseEntity.status(HttpStatus.OK).body(response);
