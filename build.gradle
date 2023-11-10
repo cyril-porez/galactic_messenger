@@ -9,14 +9,14 @@ subprojects {
         mavenCentral()
     }
 
-    task assembleAll(type: Jar) {
-        dependsOn(':server:bootJar', ':client:bootJar')
+    // task assembleAll(type: Jar) {
+    //     dependsOn(':server:bootJar', ':galacticMessengerClient:bootJar')
 
-        baseName = 'galactic_messenger'
-        version = ''
-        from project(':Server').tasks.bootJar.outputs
-        from project(':galacticMessengerClient').tasks.bootJar.outputs
+    //     from project(':Server').tasks.bootJar.outputs
+    //     from project(':galacticMessengerClient').tasks.bootJar.outputs
 
-        // Ajoutez d'autres configurations personnalisées si nécessaire
-    }
+    //     // Ajoutez d'autres configurations personnalisées si nécessaire
+
+    //     destinationDir = file('.')
+    // }
 }
