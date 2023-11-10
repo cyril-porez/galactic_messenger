@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.json.JSONObject;
 
 import com.example.galactic_messenger.Interfaces.UserRepository;
@@ -22,7 +21,6 @@ public class UserController {
     private Test service;
     private UserRepository repo;
 
-    @Autowired
     public UserController(Test testService, UserRepository repository) {
         this.service = testService;
         this.repo = repository;
