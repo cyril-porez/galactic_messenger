@@ -48,15 +48,17 @@ public class Test {
     repo.deleteById(id);
   }
 
-  public String userlogin(String name, String password){
-    Users user = repo.findByName(name);
-    String str = "";
-    if(user != null && new BCryptPasswordEncoder().matches(password, user.getPassword())){
-      str = "Vous êtes connectées !" ;
-    } else{
-      str = "Nom d'utilisateur ou mot de passe incorrect";
-    }
-    return str;
+  public CompletableFuture<String> userlogin(String name, String password){
+    return CompletableFuture.supplyAsync(() -> {
+      Users user = repo.findByName(name);
+      String str = "";
+      if(user != null && new BCryptPasswordEncoder().matches(password, user.getPassword())){
+        str = "Vous êtes connectés !" ;
+      } else{
+        str = "Nom d'utilisateur ou mot de passe incorrect";
+      }
+      return str;
+    });
   }
 
   private String hashPassword(String password) {

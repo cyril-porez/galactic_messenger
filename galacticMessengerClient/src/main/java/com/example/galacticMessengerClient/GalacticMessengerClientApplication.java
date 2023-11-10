@@ -32,7 +32,9 @@ public class GalacticMessengerClientApplication {
             Matcher matcherPort = pattern.matcher(args[1]);
             // vérifie l'ip et le port
             if (checkIpFormat(args[0]) && matcherPort.matches()) {
-                System.out.println("\nAdresse et numero de port valides\nBienvenue !\n");
+                System.out.println("\nAdresse et numero de port valides\n\n");
+                ConsoleUser consoleUser = new ConsoleUser(args);
+                consoleUser.displayLaunchInstruction();
                 return true;
             }
             else {

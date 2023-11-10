@@ -47,7 +47,6 @@ public class ConsoleUser {
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
-
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -68,8 +67,8 @@ public class ConsoleUser {
                     handleRegister(commandSplit, choiceCommand);
                     break;
                 case "/login":
+                    System.out.println("/login");
                     handleRegister(commandSplit, choiceCommand);
-                    // request(commandSplit[1], commandSplit[2], adressServer, commandSplit[0]);
                     break;
                 case "/help":
                     help();
@@ -84,8 +83,11 @@ public class ConsoleUser {
     }
 
     public void handleRegister(String[] commands, String choiceCommand) {
+        System.out.println(commands[2]);
+        String hash = hashPassword(commands[2]);
+        System.out.println(hash);
         if(commands.length == 3) {
-            ApiResponse res = requestApi.request(commands[1], hashPassword(commands[2]), adressServer, choiceCommand);
+            ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             System.out.println(res.getMessage());
         }
         else {
@@ -96,5 +98,4 @@ public class ConsoleUser {
     public String hashPassword(String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
-
 }
