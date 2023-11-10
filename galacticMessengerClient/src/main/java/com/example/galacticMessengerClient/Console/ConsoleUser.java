@@ -60,7 +60,6 @@ public class ConsoleUser {
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
             String choiceCommand = commandSplit[0];
-        
 
             switch (choiceCommand) {
                 case "/register":
@@ -78,15 +77,11 @@ public class ConsoleUser {
                     break;
             }
         }
-
         scanner.close();
     }
 
     public void handleRegister(String[] commands, String choiceCommand) {
-        System.out.println(commands[2]);
-        String hash = hashPassword(commands[2]);
-        System.out.println(hash);
-        if(commands.length == 3) {
+                if(commands.length == 3) {
             ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             System.out.println(res.getMessage());
         }
