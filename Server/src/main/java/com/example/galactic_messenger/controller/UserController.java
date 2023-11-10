@@ -3,6 +3,7 @@ package com.example.galactic_messenger.controller;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class UserController {
 
                 if (result.equals("Inscription réussie")) {
                     response.setStatus("success");
-                    response.setMessage("Requête réussie");
+                    response.setMessage("Vous êtes inscrits!");
                     Users user = new Users(name, password);
                     response.setData(user);
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -54,26 +55,28 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public  ResponseEntity<ApiResponse> login(String name, String password){
-    String result = service.userlogin(name, password); 
-    ApiResponse response = new ApiResponse();
-    if (result.equals("Vous êtes connectées !")){
-      response.setStatus("sucess");
-      response.setMessage("Vous vous êtes connecté avec succès !");
-      response.setData(name);
-      // Authentication authentication = authenticationManager();
-      // String token = JwtGenerator.generateToken(); 
-      return ResponseEntity.ok(response); 
-    } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
-      response.setStatus("error");
-      response.setMessage("Les identifiants sont incorects");
-      response.setData(null);  
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);      
-    } else {
-      response.setStatus("test");
-      response.setMessage("Ces identifiants n'existent pas ");
-      response.setData("test");
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+  public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestParam String name, @RequestParam String password){
+    return service.userlogin(name, password)
+          .handle((result, ex) -> {
+            ApiResponse response = new ApiResponse();
+            if (result.equals("Vous êtes connectés !")){
+              response.setStatus("sucess");
+              response.setMessage("Vous vous êtes connecté avec succès !");
+              Users user = new Users(name, password);
+              response.setData(user);
+              return ResponseEntity.status(HttpStatus.OK).body(response); 
+            } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
+              response.setStatus("error");
+              response.setMessage("Les identifiants sont incorects");
+              response.setData(null);  
+              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);      
+            } else {
+              response.setStatus("qsffsqdvf");
+              response.setMessage("Ces identifiants n'existent pas ");
+              response.setData("test");
+              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+          });
   }
 }

@@ -29,5 +29,4 @@ public class RequestApi {
         String url = String.format("http://%s/api/user/%s", addressIp, command);
         return restTemplate.postForObject(url, req, ApiResponse.class, map);
     };
-
 }
