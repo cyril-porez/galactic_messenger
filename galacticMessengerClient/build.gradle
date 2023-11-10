@@ -24,6 +24,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'	
 }
 
+bootJar {
+    archiveFileName = 'galactic_messenger_client.jar'
+    mainClass = 'com.example.galacticMessengerClient.GalacticMessengerClientApplication'
+    destinationDirectory = file('../')
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
