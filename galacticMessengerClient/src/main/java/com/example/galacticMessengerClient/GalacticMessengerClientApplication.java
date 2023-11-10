@@ -35,6 +35,7 @@ public class GalacticMessengerClientApplication {
                 System.out.println("\nAdresse et numero de port valides\n\n");
                 ConsoleUser consoleUser = new ConsoleUser(args);
                 consoleUser.displayLaunchInstruction();
+                consoleUser.ConsoleUseGalacticMessenger();
                 return true;
             }
             else {
