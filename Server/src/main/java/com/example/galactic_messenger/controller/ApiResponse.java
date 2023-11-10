@@ -1,9 +1,12 @@
 package com.example.galactic_messenger.controller;
 
+import org.json.JSONObject;
+import java.util.*;
+
 public class ApiResponse {
   private String status;
   private String message;
-  private Object data;
+  private Map<String, Object> data;
 
   public ApiResponse () {}
 
@@ -23,11 +26,14 @@ public class ApiResponse {
     this.message = message;
   }
   
-  public Object getData() {
+  public Map<String, Object> getData() {
     return data;
   }
 
-  public void setData(Object data) {
-    this.data = data;
+  public void setData(JSONObject data) {
+    this.data = new HashMap<String, Object>();
+    for(String key : JSONObject.getNames(data)) {
+        this.data.put(key, data.get(key));
+    }
   }
 }
