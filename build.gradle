@@ -1,0 +1,22 @@
+subprojects {
+    apply plugin: 'java'
+    java {
+        sourceCompatibility = JavaVersion.VERSION_20
+        targetCompatibility = JavaVersion.VERSION_20
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    task assembleAll(type: Jar) {
+        dependsOn(':server:bootJar', ':client:bootJar')
+
+        baseName = 'galactic_messenger'
+        version = ''
+        from project(':Server').tasks.bootJar.outputs
+        from project(':galacticMessengerClient').tasks.bootJar.outputs
+
+        // Ajoutez d'autres configurations personnalisées si nécessaire
+    }
+}
