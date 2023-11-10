@@ -1,6 +1,9 @@
 package com.example.galactic_messenger.Services;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +24,23 @@ public class Test {
 
   }
 
-  public String registerUser(String name, String password){
-     String str = "";
-    if (userExists(name)){
-      str = "Ce nom existe déjà";
-      System.out.println("user exist");
-    } else { 
-      Users user = new Users(name, hashPassword(password));
-      repo.save(user);
-      repo.flush();
-      str = "Inscription réussie";     
-      System.out.println("user création");
-    }
+  @Async
+  public CompletableFuture<String> registerUser(String name, String password){
+    return CompletableFuture.supplyAsync(() -> {
+      String str = "";
+      if (userExists(name)){
+        str = "Ce nom existe déjà";
+        System.out.println("user exist");
+      } else { 
+        Users user = new Users(name, hashPassword(password));
+        repo.save(user);
+        repo.flush();
+        str = "Inscription réussie";
+        System.out.println("user création");
+      }
+      return str;
+    });
 
-    return str;
   }
 
 
@@ -42,15 +48,15 @@ public class Test {
     repo.deleteById(id);
   }
 
-  public void userlogin(String name, String password){
+  public String userlogin(String name, String password){
     Users user = repo.findByName(name);
-
+    String str = "";
     if(user != null && new BCryptPasswordEncoder().matches(password, user.getPassword())){
-      System.out.println("Bonjour " + name + " vous êtes connecté");
+      str = "Vous êtes connectées !" ;
     } else{
-      System.out.println("Nom d'utilisateur ou mot de passe incorrect");
+      str = "Nom d'utilisateur ou mot de passe incorrect";
     }
-
+    return str;
   }
 
   private String hashPassword(String password) {
