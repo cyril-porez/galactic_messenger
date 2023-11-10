@@ -1,11 +1,8 @@
 package com.example.galacticMessengerClient.Console;
 
-import java.util.ArrayList;
-import java.util.List;
+
 // import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
@@ -60,7 +57,6 @@ public class ConsoleUser {
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
             String choiceCommand = commandSplit[0];
-        
 
             switch (choiceCommand) {
                 case "/register":
@@ -84,8 +80,6 @@ public class ConsoleUser {
 
     public void handleRegister(String[] commands, String choiceCommand) {
         System.out.println(commands[2]);
-        String hash = hashPassword(commands[2]);
-        System.out.println(hash);
         if(commands.length == 3) {
             ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             System.out.println(res.getMessage());
@@ -93,9 +87,5 @@ public class ConsoleUser {
         else {
             System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
         }
-    }
-
-    public String hashPassword(String password) {
-        return new BCryptPasswordEncoder().encode(password);
     }
 }
