@@ -82,7 +82,7 @@ public class ConsoleUser {
         System.out.println(commands[2]);
         if(commands.length == 3) {
             ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
-            System.out.println(res.getMessage());
+            System.out.println(res.getMessage() + res.getData());
         }
         else {
             System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");

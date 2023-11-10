@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.galacticMessengerClient.Console.ConsoleUser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.lang.*;
 
 @SpringBootApplication
 public class GalacticMessengerClientApplication {
@@ -72,8 +71,4 @@ public class GalacticMessengerClientApplication {
 
         return false;
     }
-
-    // private static boolean checkPortFormat(String port) {
-
-    // }
 }
