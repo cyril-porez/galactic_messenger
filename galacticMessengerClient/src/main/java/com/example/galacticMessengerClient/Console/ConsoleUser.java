@@ -79,7 +79,6 @@ public class ConsoleUser {
     }
 
     public void handleRegister(String[] commands, String choiceCommand) {
-        System.out.println(commands[2]);
         if(commands.length == 3) {
             ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             System.out.println(res.getMessage() + res.getData());
