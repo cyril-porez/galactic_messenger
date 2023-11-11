@@ -91,7 +91,7 @@ public class ConsoleUser {
 
             }
         } catch (Exception e){
-            String exception = e.getMessage().substring(6);
+            String exception = e.getMessage().substring(7);
             String errorMessage = "";
             try{
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -101,10 +101,6 @@ public class ConsoleUser {
                 e.printStackTrace();
             }
             System.out.println(errorMessage);
-            System.out.println("Une erreur s'est produite lors de la requête : " + e.getMessage());
-
-
-
         }
     }
 
@@ -141,9 +137,16 @@ public class ConsoleUser {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
             }
         } catch (Exception e){
-            String[] exception = e.getMessage().split(" ");
-            System.out.println(exception);
-            System.out.println("Une erreur s'est produite lors de la requête : " + e.getMessage());
+            String exception = e.getMessage().substring(7);
+            String errorMessage = "";
+            try{
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(exception);
+                errorMessage = jsonNode.get("message").asText();
+            } catch (JsonProcessingException jsonProcessingException){
+                e.printStackTrace();
+            }
+            System.out.println(errorMessage);
         }
     }
 }
