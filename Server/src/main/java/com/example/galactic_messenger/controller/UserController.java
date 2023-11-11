@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.example.galactic_messenger.Interfaces.UserRepository;
 import com.example.galactic_messenger.Services.Test;
@@ -39,21 +42,43 @@ public class UserController {
                     ApiResponse response = new ApiResponse();
 
                     if (result.equals("Inscription réussie")) {
-                        response.setStatus("success");
-                        response.setMessage("Vous êtes inscrits!");
+                        try {
+                            response.setStatus("success");
+                            response.setMessage("Vous êtes inscrits!");
 
-                        JSONObject data = new JSONObject();
-                        data.put("name", name);
-                        data.put("password", password);
-                        response.setData(data);
+                            // JSONObject data = new JSONObject();
+                            // data.put("name", name);
+                            // data.put("password", password);
+                            Map<String, Object> dataMap = new HashMap<>();
+                            dataMap.put("name", name);
+                            dataMap.put("password", password);
+                            response.setData(dataMap);
 
-                        return ResponseEntity.status(HttpStatus.OK).body(response);
+                            return ResponseEntity.status(HttpStatus.OK).body(response);
+                            
+                        } catch (Exception e) {
+                            ApiResponse errorResponse = new ApiResponse();
+                            errorResponse.setStatus("error");
+                            errorResponse.setMessage("Une erreur s'est produite");
+                            // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
+                            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
+                        }
+                        
                     } else if (result.equals("Ce nom existe déjà")) {
-                        response.setStatus("error");
-                        response.setMessage("Les identifiants sont déjà utilisés");
-                        response.setData(null);
-                        System.out.println(response);
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                        try {
+                            response.setStatus("error");
+                            response.setMessage("Les identifiants sont déjà utilisés");
+                            response.setData(null);
+                            System.out.println(response);
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                        } catch (Exception e) {
+                            ApiResponse errorResponse = new ApiResponse();
+                            errorResponse.setStatus("error");
+                            errorResponse.setMessage("Une erreur s'est produite");
+                            // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
+                            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
+                        }
+                       
                     } else {
                         response.setStatus("test");
                         response.setMessage("test");
@@ -70,21 +95,41 @@ public class UserController {
                 .handle((result, ex) -> {
                     ApiResponse response = new ApiResponse();
                     if (result.equals("Vous êtes connectés !")) {
-                        response.setStatus("sucess");
-                        response.setMessage("Vous vous êtes connecté avec succès !");
-
-                        Users u = repo.findByName(name);
-                        JSONObject data = new JSONObject();
-                        data.put("id", u.getId());
-                        data.put("name", u.getName());
-
-                        response.setData(data);
-                        return ResponseEntity.status(HttpStatus.OK).body(response);
+                        try {
+                            response.setStatus("sucess");
+                            response.setMessage("Vous vous êtes connecté avec succès !");
+    
+                            Users u = repo.findByName(name);
+                            // JSONObject data = new JSONObject();
+                            Map<String, Object> data = new HashMap<>();
+    
+                            data.put("id", u.getId());
+                            data.put("name", u.getName());
+    
+                            response.setData(data);
+                            return ResponseEntity.status(HttpStatus.OK).body(response);
+                            
+                        } catch (Exception e) {
+                            ApiResponse errorResponse = new ApiResponse();
+                            errorResponse.setStatus("error");
+                            errorResponse.setMessage("Une erreur s'est produite");
+                            // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
+                            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
+                        }
                     } else if (result.equals("Nom d'utilisateur ou mot de passe incorrect")) {
-                        response.setStatus("error");
-                        response.setMessage("Les identifiants sont incorects");
-                        response.setData(null);
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                        try {
+                            response.setStatus("error");
+                            response.setMessage("Les identifiants sont incorects");
+                            response.setData(null);
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                            
+                        } catch (Exception e) {
+                            ApiResponse errorResponse = new ApiResponse();
+                            errorResponse.setStatus("error");
+                            errorResponse.setMessage("Une erreur s'est produite");
+                            // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
+                            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
+                        }
                     } else {
                         response.setStatus("test");
                         response.setMessage("Ces identifiants n'existent pas ");

@@ -1,12 +1,14 @@
 package com.example.galactic_messenger.controller;
 
-import org.json.JSONObject;
+// import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
+import java.io.IOException;
 
 public class ApiResponse {
   private String status;
   private String message;
-  private Map<String, Object> data;
+  private String data;
 
   public ApiResponse () {}
 
@@ -26,14 +28,12 @@ public class ApiResponse {
     this.message = message;
   }
   
-  public Map<String, Object> getData() {
+  public String getData() {
     return data;
   }
 
-  public void setData(JSONObject data) {
-    this.data = new HashMap<String, Object>();
-    for(String key : JSONObject.getNames(data)) {
-        this.data.put(key, data.get(key));
-    }
+  public void setData(Map<String, Object> dataMap) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    this.data = mapper.writeValueAsString(dataMap);
   }
 }
