@@ -139,4 +139,11 @@ public class UserController {
 
                 });
     }
+
+    /*
+    @PostMapping("/accept")
+    public CompletableFuture<ResponseEntity<ApiResponse>> accept(@RequestParam String name){
+
+        return
+    }*/
 }

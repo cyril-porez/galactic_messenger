@@ -58,6 +58,8 @@ public class ServerSocket {
         // clientCf.setSoTimeout(soTimeout);
         return clientCf;
     }
+
+    // Ne fonctionne pas
     /*@Bean
     public ThreadAffinityClientConnectionFactory ClientInThread() {
         return new ThreadAffinityClientConnectionFactory(clientCF());
