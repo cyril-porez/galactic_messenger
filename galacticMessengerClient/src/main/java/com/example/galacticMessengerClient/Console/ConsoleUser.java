@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
@@ -73,6 +72,9 @@ public class ConsoleUser {
                     break;
                 case "/help":
                     help();
+                    break;
+                case "/exit":
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Commande non reconnus par le système !");
