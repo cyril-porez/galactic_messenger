@@ -1,7 +1,6 @@
 package com.example.galacticMessengerClient.Console;
 
 
-// import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -132,7 +131,7 @@ public class ConsoleUser {
                     e.printStackTrace(); 
                 }
                 
-                System.out.println(res.getMessage() + jsonData);
+                System.out.println(res.getMessage());
             }
             else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
