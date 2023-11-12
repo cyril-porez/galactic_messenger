@@ -1,11 +1,7 @@
 package com.example.galacticMessengerClient.Console;
 
 
-<<<<<<< HEAD
-=======
 import java.util.Base64;
-// import org.yaml.snakeyaml.scanner.Scanner;
->>>>>>> main
 import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
