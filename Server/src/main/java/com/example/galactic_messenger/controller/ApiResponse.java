@@ -2,6 +2,10 @@ package com.example.galactic_messenger.controller;
 
 // import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.*;
 import java.io.IOException;
 
@@ -36,4 +40,17 @@ public class ApiResponse {
     ObjectMapper mapper = new ObjectMapper();
     this.data = mapper.writeValueAsString(dataMap);
   }
+
+  public ApiResponse sendMessageToAskedUser(String asked_user){
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders httpHeaders = new HttpHeaders();
+
+    String requestBody = asked_user + " demande à se connecter a vous." + "/accept pour établir une connexion ou /decline pour la refuser.";
+    httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+    return null;
+  }/*
+  public String sendMessage(String asked_user){
+
+  }*/
 }

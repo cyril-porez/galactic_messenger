@@ -1,9 +1,11 @@
 package com.example.galacticMessengerClient.Console;
 
 
+import java.util.Objects;
 import java.util.Base64;
 import java.util.Scanner;
 
+import com.example.galacticMessengerClient.TCP.TcpClientConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -49,6 +51,8 @@ public class ConsoleUser {
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
+        System.out.println("Pour fermer le client: ");
+        System.out.println("- /exit");
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -97,6 +101,12 @@ public class ConsoleUser {
                 case "/exit":
                     System.exit(0);
                     break;
+                case "/private_chat":
+                    handlePrivateChat(commandSplit, choiceCommand);
+                /*
+                case "/accept":
+                    handleAccept(commandSplit, choiceCommand);
+                    break;*/
                 default:
                     System.out.println("Commande non reconnue par le système !");
                     break;
@@ -130,7 +140,6 @@ public class ConsoleUser {
     public void handleLogin(String[] commands, String choiceCommand) {
         try{
             if(commands.length == 3) {
-                System.out.println("test");
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             
                 ObjectMapper mapper = new ObjectMapper();
@@ -144,12 +153,7 @@ public class ConsoleUser {
                 try {
                     JsonNode outerNode = mapper.readTree(jsonData);
                     JsonNode node = mapper.readTree(outerNode.asText());
-                    String name = node.has("name") ? node.get("name").asText() : "Nom inconnu";
-                    int id = node.has("id") ? node.get("id").asInt() : -1;
                     String token = node.has("token") ? node.get("token").asText() : "Token inconnu";
-                    System.out.println("Id => " + id);
-                    System.out.println("Name => " + name);
-                    System.out.println("token =>" + token);
 
                     Session.setData("token", token);
                     
@@ -174,6 +178,27 @@ public class ConsoleUser {
             }
             System.out.println(errorMessage);
         }
+    }
+
+    public void handlePrivateChat(String []commands, String choiceCommand){
+        if (commands.length == 3 && Objects.equals(commands[0], "azerty")){
+            ApiResponse res = requestApi.requestConnection(commands[0], commands[1], choiceCommand, adressServer);
+            System.out.println(res.getMessage());
+            /*
+                Logique a implementer ici
+             */
+            TcpClientConfig client1 = new TcpClientConfig();
+            client1.handleReply("Vous et");
+        }
+    }
+
+    public void handleAccept(String [] commands, String choiceCommand){
+        if (commands.length == 2 && Objects.equals(commands[1], "azerty")){
+
+            TcpClientConfig clientConfig = new TcpClientConfig();
+            clientConfig.handleReply("Vous et");
+        }
+
     }
 
     private JsonNode decodeJWT(String token) {
