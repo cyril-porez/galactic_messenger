@@ -5,8 +5,6 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,10 +44,6 @@ public class UserController {
                         try {
                             response.setStatus(HttpStatus.OK.value());
                             response.setMessage("Vous êtes inscrits!");
-
-                            // JSONObject data = new JSONObject();
-                            // data.put("name", name);
-                            // data.put("password", password);
                             Map<String, Object> dataMap = new HashMap<>();
                             dataMap.put("name", name);
                             dataMap.put("password", password);
@@ -101,6 +95,8 @@ public class UserController {
                             response.setMessage("Vous vous êtes connecté avec succès !");
     
                             Users user = repo.findByName(name);
+                            user.setIsConnected(true);
+                            repo.save(user);
                             // JSONObject data = new JSONObject();
                             Map<String, Object> data = new HashMap<>();
     
@@ -137,11 +133,8 @@ public class UserController {
                     } else {
                         response.setStatus(HttpStatus.BAD_REQUEST.value());
                         response.setMessage("Ces identifiants n'existent pas ");
-                        // response.setData("test");
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
                     }
                 });
     }
 }
-
-

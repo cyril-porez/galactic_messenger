@@ -7,6 +7,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.galactic_messenger.security.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +27,7 @@ public class SecurityConfig {
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .sessionFixation().migrateSession()
               .maximumSessions(1).maxSessionsPreventsLogin(true))
+            .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
 	          .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/api/user/register").permitAll()
