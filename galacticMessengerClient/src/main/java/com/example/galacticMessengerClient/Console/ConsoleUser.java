@@ -88,7 +88,7 @@ public class ConsoleUser {
         try{
             if(commands.length == 3) {
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
-                System.out.println(res.getMessage() + res.getMessage());
+                System.out.println(res.getMessage());
 
             }
         } catch (Exception e){
@@ -124,15 +124,15 @@ public class ConsoleUser {
                     JsonNode node = mapper.readTree(outerNode.asText());
                     String name = node.has("name") ? node.get("name").asText() : "Nom inconnu";
                     int id = node.has("id") ? node.get("id").asInt() : -1;
+                    String token = node.has("token") ? node.get("token").asText() : "Token inconnu";
                     System.out.println("Id => " + id);
                     System.out.println("Name => " + name);
+                    System.out.println("token =>" + token);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace(); 
                 }
                 
                 System.out.println(res.getMessage() + jsonData);
-                // System.out.println("Id => " + id);
-                // System.out.println("Name => " + name);
             }
             else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
