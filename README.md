@@ -51,8 +51,9 @@ Il y a deux manières de lancer l'application :
 **1. En utilisant Java**\
 Dans le terminal, entrez les commandes suivantes, dans l'ordre :
 
-1. `gradle build`;
-2. `java -jar galactic_messenger_server.jar <numéro de port>` pour le serveur ou `java -jar galactic_messenger_client.jar <adresse ip du serveur> <numéro_de_port>` pour le client.
+1. `gradle build` pour construire le projet et créer les fichiers .jar qui vont permettre de lancer le projet.
+2. Lancer le serveur avec : `java -jar galactic_messenger_server.jar <numéro de port>`
+3. Lancer le client avec : `java -jar galactic_messenger_client.jar <adresse ip du serveur> <numéro_de_port>` pour le client.
 
 **2. En utilisant `make`**\
 Nous avons intégré un raccourci afin de *build* et de lancer les fichiers en une seule commande. Cette commande à besoin de `make` pour fonctionner. Il est donc recommandé d'installer `make` sur votre machine, en suivant [ce tutoriel](https://stackoverflow.com/a/32127632/17311396).
