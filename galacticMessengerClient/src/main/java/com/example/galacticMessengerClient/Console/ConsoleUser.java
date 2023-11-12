@@ -2,7 +2,6 @@ package com.example.galacticMessengerClient.Console;
 
 
 import java.util.Base64;
-// import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
@@ -159,7 +157,7 @@ public class ConsoleUser {
                     e.printStackTrace(); 
                 }
                 
-                System.out.println(res.getMessage() + jsonData);
+                System.out.println(res.getMessage());
             }
             else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
