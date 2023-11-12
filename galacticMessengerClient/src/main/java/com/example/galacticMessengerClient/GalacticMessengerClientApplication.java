@@ -8,6 +8,7 @@ import com.example.galacticMessengerClient.Console.ConsoleUser;
 
 import java.util.regex.*;
 import java.util.*;
+import java.io.IOException;
 import java.net.*;
 
 @SpringBootApplication
@@ -17,7 +18,7 @@ public class GalacticMessengerClientApplication {
 
         SpringApplication.run(GalacticMessengerClientApplication.class, args);
         try {
-            if (checkArgs(args) && findIPv4(args[0])) {
+            if (checkArgs(args) && findIPv4(args[0]) && findPort(args[0], Integer.parseInt(args[1]))) {
                 ConsoleUser consoleUser = new ConsoleUser(args);
                 consoleUser.displayLaunchInstruction();
                 consoleUser.ConsoleUseGalacticMessenger();
@@ -29,10 +30,10 @@ public class GalacticMessengerClientApplication {
 
     private static boolean findIPv4(String ipToSearch) throws SocketException {
         String ip = null;
-        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
-        while (networkInterfaces.hasMoreElements() && ip == null) {
-            NetworkInterface ni = networkInterfaces.nextElement();
+        while (interfaces.hasMoreElements() && ip == null) {
+            NetworkInterface ni = interfaces.nextElement();
             Enumeration<InetAddress> inetAddresses = ni.getInetAddresses();
 
             while (inetAddresses.hasMoreElements() && ip == null) {
@@ -52,6 +53,19 @@ public class GalacticMessengerClientApplication {
         return false;
     }
 
+    private static boolean findPort(String ip, int port) {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress(ip, port), 10_000 /* 10s */);
+            return socket.isConnected();
+        } 
+        catch (Exception e) {
+            System.out.println("\nPort inexistant ou fermé.\n");
+            System.exit(0);
+        } 
+
+        return false;
+    }
+
     private static boolean checkArgs(String[] args) {
         if (args.length == 2) {
             // regex basé sur le format de port
@@ -61,7 +75,6 @@ public class GalacticMessengerClientApplication {
             Matcher matcherPort = pattern.matcher(args[1]);
             // vérifie l'ip et le port
             if (checkIpFormat(args[0]) && matcherPort.matches()) {
-                System.out.println("\nAdresse et numero de port valides\n\n");
                 return true;
             } else {
                 System.out.println("\nAdresse et numero de port invalides !\n\n");
