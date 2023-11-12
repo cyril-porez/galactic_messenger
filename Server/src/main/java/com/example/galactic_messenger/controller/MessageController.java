@@ -31,7 +31,7 @@ public class MessageController {
                     ApiResponse response = new ApiResponse();
                     if (result.equals("L'utilisateur existe")) {
                         try {
-                            response.setStatus("success");
+                            response.setStatus(HttpStatus.OK.value());
                             response.setMessage("Utilisateur trouvé !");
                             /*response.sendMessageToAskedUser()*/
                             /*
@@ -46,28 +46,28 @@ public class MessageController {
                             return ResponseEntity.status(HttpStatus.OK).body(response);
                         } catch (Exception e) {
                             ApiResponse errorResponse = new ApiResponse();
-                            errorResponse.setStatus("error");
+                            errorResponse.setStatus(HttpStatus.BAD_GATEWAY.value());
                             errorResponse.setMessage("Une erreur s'est produite");
                             // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
                             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
                         }
                     } else if (result.equals("L'utilisateur n'existe pas !")) {
                         try {
-                            response.setStatus("error");
+                            response.setStatus(HttpStatus.BAD_REQUEST.value());
                             response.setMessage("Utilisateur non trouvé !");
                             response.setData(null);
                             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
                         } catch (Exception e) {
                             ApiResponse errorResponse = new ApiResponse();
-                            errorResponse.setStatus("error");
+                            errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
                             errorResponse.setMessage("Une erreur s'est produite");
                             // Vous pouvez également inclure des détails supplémentaires sur l'exception, si nécessaire
                             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
                         }
                     }
                     else {
-                        response.setStatus("test");
+                        response.setStatus(HttpStatus.FORBIDDEN.value());
                         response.setMessage("Ces identifiants n'existent pas ");
                         // response.setData("test");
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
