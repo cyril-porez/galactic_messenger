@@ -1,17 +1,17 @@
 package com.example.galacticMessengerClient.controllers;
 
 public class ApiResponse {
-  private String status;
+  private int status;
   private String message;
   private Object data;
 
   public ApiResponse () {}
 
-  public String getStatus() {
+  public int getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(int status) {
     this.status = status;
   }
 
