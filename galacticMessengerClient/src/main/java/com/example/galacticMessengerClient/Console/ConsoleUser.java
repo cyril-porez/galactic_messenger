@@ -1,14 +1,17 @@
 package com.example.galacticMessengerClient.Console;
 
 
+import java.util.Base64;
 // import org.yaml.snakeyaml.scanner.Scanner;
 import java.util.Scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
@@ -56,11 +59,32 @@ public class ConsoleUser {
         System.out.println("Veuillez entrer votre commande!");
 
         boolean isRunning = true;
+        ObjectMapper m = new ObjectMapper();
+        JsonNode payloadNode = null;
+        String sub = "";
 
         while (isRunning) {
+            if(!Session.isEmpty() && Session.getData("token") != null) {
+                try {
+                    payloadNode = m.readTree(decodeJWT(
+                        (String)Session
+                        .getData("token"))
+                        .get("payload")
+                        .asText());
+                    sub = payloadNode.get("sub").asText();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.printf(
+                "[ %s ] > ", 
+                sub == "" ? "Invité" : sub
+            );
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
             String choiceCommand = commandSplit[0];
+
 
             switch (choiceCommand) {
                 case "/register":
@@ -76,7 +100,7 @@ public class ConsoleUser {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Commande non reconnus par le système !");
+                    System.out.println("Commande non reconnue par le système !");
                     break;
             }
         }
@@ -128,6 +152,9 @@ public class ConsoleUser {
                     System.out.println("Id => " + id);
                     System.out.println("Name => " + name);
                     System.out.println("token =>" + token);
+
+                    Session.setData("token", token);
+                    
                 } catch (JsonProcessingException e) {
                     e.printStackTrace(); 
                 }
@@ -149,5 +176,19 @@ public class ConsoleUser {
             }
             System.out.println(errorMessage);
         }
+    }
+
+    private JsonNode decodeJWT(String token) {
+        String[] chunks = token.split("\\.");
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode jsonNode = mapper.createObjectNode();
+
+        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
+
+        jsonNode.put("payload", payload);
+        
+        // System.out.println(jsonNode);
+        return jsonNode;
     }
 }
