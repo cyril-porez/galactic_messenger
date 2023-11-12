@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "com.example.galacticMessengerClient.GalacticMessengerClientApplication",
             "projectName": "galacticMessengerClient",
-            "args": "10.10.26.15 8080"
+            "args": "192.168.224.160 8080"
         }
     ]
 }

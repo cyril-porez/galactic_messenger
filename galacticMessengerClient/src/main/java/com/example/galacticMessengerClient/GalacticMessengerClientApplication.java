@@ -2,24 +2,54 @@ package com.example.galacticMessengerClient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import com.example.galacticMessengerClient.Console.ConsoleUser;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import java.util.regex.*;
+import java.util.*;
+import java.net.*;
 
 @SpringBootApplication
 public class GalacticMessengerClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GalacticMessengerClientApplication.class, args);
 
-        if (checkArgs(args)) {
-            try {
+        SpringApplication.run(GalacticMessengerClientApplication.class, args);
+        try {
+            if (checkArgs(args) && findIPv4(args[0])) {
                 ConsoleUser consoleUser = new ConsoleUser(args);
+                consoleUser.displayLaunchInstruction();
                 consoleUser.ConsoleUseGalacticMessenger();
-            } catch (Exception e) {
-                System.out.println(e);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean findIPv4(String ipToSearch) throws SocketException {
+        String ip = null;
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+        while (networkInterfaces.hasMoreElements() && ip == null) {
+            NetworkInterface ni = networkInterfaces.nextElement();
+            Enumeration<InetAddress> inetAddresses = ni.getInetAddresses();
+
+            while (inetAddresses.hasMoreElements() && ip == null) {
+                InetAddress address = inetAddresses.nextElement();
+
+                if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
+                    String temp = address.toString();
+                    String currentIp = temp.replace("/", "");
+
+                    if (currentIp.equals(ipToSearch)) {
+                        return true;
+                    }
+                }
             }
         }
+
+        return false;
     }
 
     private static boolean checkArgs(String[] args) {
@@ -32,12 +62,8 @@ public class GalacticMessengerClientApplication {
             // vérifie l'ip et le port
             if (checkIpFormat(args[0]) && matcherPort.matches()) {
                 System.out.println("\nAdresse et numero de port valides\n\n");
-                ConsoleUser consoleUser = new ConsoleUser(args);
-                consoleUser.displayLaunchInstruction();
-                consoleUser.ConsoleUseGalacticMessenger();
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("\nAdresse et numero de port invalides !\n\n");
                 System.exit(0);
             }
@@ -60,7 +86,7 @@ public class GalacticMessengerClientApplication {
                     // pour chaque char de l'octet
                     for (char o : octet.toCharArray()) {
                         // si le char n'est pas un nombre
-                        if(!Character.isDigit(o)) {
+                        if (!Character.isDigit(o)) {
                             return false;
                         }
                         return true;
