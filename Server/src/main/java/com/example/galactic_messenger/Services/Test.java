@@ -40,13 +40,13 @@ public class Test {
       }
       return str;
     });
-
   }
 
   public void deletePerson(Long id) {
     repo.deleteById(id);
   }
 
+  @Async
   public CompletableFuture<String> userlogin(String name, String password){
     return CompletableFuture.supplyAsync(() -> {
       Users user = repo.findByName(name);
