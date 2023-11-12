@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.json.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -28,11 +26,6 @@ public class UserController {
         this.service = testService;
         this.repo = repository;
     }
-    
-    // public UserController() {
-    // // Initialisation par défaut, par exemple, vous pouvez instancier un
-    // UserRepository ici si nécessaire.
-    // }
 
     @PostMapping("/register")
     public CompletableFuture<ResponseEntity<ApiResponse>> register(@RequestParam String name,
