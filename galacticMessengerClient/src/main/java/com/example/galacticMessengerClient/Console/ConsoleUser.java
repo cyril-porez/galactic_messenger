@@ -51,6 +51,8 @@ public class ConsoleUser {
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
+        System.out.println("Pour fermer le client: ");
+        System.out.println("- /exit");
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -138,7 +140,6 @@ public class ConsoleUser {
     public void handleLogin(String[] commands, String choiceCommand) {
         try{
             if(commands.length == 3) {
-                System.out.println("test");
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
             
                 ObjectMapper mapper = new ObjectMapper();
@@ -152,12 +153,7 @@ public class ConsoleUser {
                 try {
                     JsonNode outerNode = mapper.readTree(jsonData);
                     JsonNode node = mapper.readTree(outerNode.asText());
-                    String name = node.has("name") ? node.get("name").asText() : "Nom inconnu";
-                    int id = node.has("id") ? node.get("id").asInt() : -1;
                     String token = node.has("token") ? node.get("token").asText() : "Token inconnu";
-                    System.out.println("Id => " + id);
-                    System.out.println("Name => " + name);
-                    System.out.println("token =>" + token);
 
                     Session.setData("token", token);
                     
