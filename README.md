@@ -49,11 +49,10 @@ Extrayez-le dans un dossier et ouvrez un terminal à la racine du dossier (là o
 Il y a deux manières de lancer l'application :
 
 **1. En utilisant Java**\
-Dans le terminal, entrez les commandes suivantes, dans l'ordre :\
-1. `cd ./Server` ou `cd ./Client` en fonction de quelle machine tiendra le rôle de serveur ou de client ;
-2. `gradle build ./galactic_messenger_server.jar` ;
-3. `cd ..`
-4. `java -jar galactic_messenger_server.jar <numéro de port>` pour le serveur ou `java -jar galactic_messenger_client.jar <adresse ip du serveur> <numéro_de_port>` pour le client.
+Dans le terminal, entrez les commandes suivantes, dans l'ordre :
+
+1. `gradle build`;
+2. `java -jar galactic_messenger_server.jar <numéro de port>` pour le serveur ou `java -jar galactic_messenger_client.jar <adresse ip du serveur> <numéro_de_port>` pour le client.
 
 **2. En utilisant `make`**\
 Nous avons intégré un raccourci afin de *build* et de lancer les fichiers en une seule commande. Cette commande à besoin de `make` pour fonctionner. Il est donc recommandé d'installer `make` sur votre machine, en suivant [ce tutoriel](https://stackoverflow.com/a/32127632/17311396).
