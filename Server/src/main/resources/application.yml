@@ -10,8 +10,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
-      server:properties:
-        webAllowOthers: true
+      settings:
+        web-allow-others: true
   security:
     user:
       name: admin
