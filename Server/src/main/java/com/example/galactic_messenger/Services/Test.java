@@ -72,4 +72,27 @@ public class Test {
     return isFind;
   }
 
+  @Async
+  public CompletableFuture<String> private_chat(String asked_user, String user2){
+    return CompletableFuture.supplyAsync(() -> {
+      Users sender = repo.findByName(user2);
+    String str = "";
+    if (userExists(asked_user)){
+
+      str = "L'utilisateur existe";
+      /* verifier aussi le statut de connexion*/
+      System.out.println("client2 exist");
+    }
+    else {
+      str = "L'utilisateur n'existe pas !";
+    }
+    return str;
+    });
+  }
+
+  /*
+  @Async
+  public CompletableFuture<String> accept(String name){
+
+  }*/
 }

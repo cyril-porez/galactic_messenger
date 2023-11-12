@@ -1,5 +1,6 @@
 package com.example.galacticMessengerClient.Request;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,9 +12,7 @@ import com.example.galacticMessengerClient.controllers.ApiResponse;
 
 public class RequestApi {
 
-    public RequestApi() {
-
-    }
+    public RequestApi() {}
 
     public ApiResponse request(String name, String password, String addressIp, String command) {
         RestTemplate restTemplate = new RestTemplate();
@@ -28,4 +27,19 @@ public class RequestApi {
         String url = String.format("http://%s/api/user/%s", addressIp, command);
         return restTemplate.postForObject(url, req, ApiResponse.class, map);
     };
+
+    public ApiResponse requestConnection(String asked_user, String user1, String command, String addressIp){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("name", asked_user);
+        map.add("name", user1);
+
+        System.out.println(addressIp);
+        HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
+        String url = String.format("http://%s/api/user/%s", addressIp, command);
+        return restTemplate.postForObject(url, req, ApiResponse.class, map);
+    }
 }

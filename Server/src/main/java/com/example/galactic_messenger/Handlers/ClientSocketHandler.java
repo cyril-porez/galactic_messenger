@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ClientSocketHandler {
     @ServiceActivator(inputChannel = "toTcp")
     public byte[] handleMessage(byte[] msg) {
-        // TODO implement some buisiness logic here
+        //  implement some buisiness logic here
         return msg;
     }
 }

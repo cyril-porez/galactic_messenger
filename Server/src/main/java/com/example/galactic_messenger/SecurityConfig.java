@@ -28,6 +28,9 @@ public class SecurityConfig {
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/api/user/register").permitAll()
             .requestMatchers("/api/user/login").permitAll()
+            .requestMatchers("/api/user/private_chat").permitAll()
+            .requestMatchers("/api/user/accept").permitAll()
+            .requestMatchers("/api/user/decline").permitAll()
             .anyRequest().authenticated())
             .headers(headers -> headers.disable());
     

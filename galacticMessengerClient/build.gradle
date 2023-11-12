@@ -21,9 +21,13 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-crypto'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.json:json:20231013'
+	implementation 'org.jetbrains:annotations:24.0.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.0-rc1'
+	implementation 'org.springframework.boot:spring-boot-starter-integration'
+	implementation 'org.springframework.integration:spring-integration-websocket:6.1.4'
+	implementation 'org.springframework.integration:spring-integration-ip:6.1.4'
 	
 }
 
