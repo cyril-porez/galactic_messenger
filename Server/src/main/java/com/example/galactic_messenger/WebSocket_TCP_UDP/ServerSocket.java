@@ -16,7 +16,6 @@ import org.springframework.integration.ip.tcp.connection.TcpNetClientConnectionF
 import org.springframework.integration.ip.tcp.connection.TcpNetServerConnectionFactory;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.web.context.request.RequestContextListener;
 
 @Configuration
 @EnableIntegration
