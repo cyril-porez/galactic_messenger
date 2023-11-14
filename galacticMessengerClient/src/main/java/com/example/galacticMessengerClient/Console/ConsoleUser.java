@@ -45,7 +45,7 @@ public class ConsoleUser {
         System.out.println("==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================");
-        System.out.println("Félicitations, vous etês connectés\n");
+        System.out.println("Félicitations, vous etês connecté\n");
         System.out.println("Entrer /help pour voir toutes les commandes disponible\n");
 
     }

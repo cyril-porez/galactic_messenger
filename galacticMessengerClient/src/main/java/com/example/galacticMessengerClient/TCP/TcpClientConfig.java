@@ -3,6 +3,8 @@ package com.example.galacticMessengerClient.TCP;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.MessageEndpoint;
+import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.config.EnableIntegration;
@@ -10,6 +12,7 @@ import org.springframework.integration.ip.tcp.TcpOutboundGateway;
 import org.springframework.integration.ip.tcp.connection.AbstractClientConnectionFactory;
 import org.springframework.integration.ip.tcp.connection.TcpNetClientConnectionFactory;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableIntegration
@@ -36,7 +39,7 @@ public class TcpClientConfig {
     public TcpOutboundGateway tcpOutGate() {
         TcpOutboundGateway outGate = new TcpOutboundGateway();
         outGate.setConnectionFactory(clientCF());
-        // outGate.setReplyChannel(toTcp());
+        outGate.setReplyChannel(sendChannel());
         return outGate;
     }
     @Bean
@@ -48,6 +51,7 @@ public class TcpClientConfig {
     public MessageChannel receiveChannel() {
         return new DirectChannel();
     }
+
 
     @Transformer(inputChannel = "receiveChannel", outputChannel = "sendChannel")
     public String handleReply(String reply) {
