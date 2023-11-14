@@ -32,25 +32,76 @@ public class ConsoleUser {
         System.out.println("==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================");
-        System.out.println("Bienvenue sur galactic Messenger.");
-        System.out.println();
-        System.out.println("Afin d'utiliser l'application, voici les commandes");
-        System.out.println();
+        System.out.println("Bienvenue sur galactic Messenger.\n");
+        System.out.println("Afin d'utiliser l'application, voici les commandes\n");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Demander de l'aide:");
-        System.out.println("- /help");
-        System.out.println();
+        System.out.println("- /help\n");
+    }
+    public void loggedUserInstruction(){
+        System.out.println("==================");
+        System.out.println("GALACTIC MESSENGER");
+        System.out.println("==================");
+        System.out.println("Félicitations, vous etês connecté\n");
+        System.out.println("Entrer /help pour voir toutes les commandes disponible\n");
+
     }
 
     public static void help() {
-        System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les comandes:");
+        System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les commandes:");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
+        System.out.println("Pour fermer le client: ");
+        System.out.println("- /exit");
+    }
+
+    public static void help_forLoggedUser(){
+        /* Commands liste utilisateurs connectés */
+        System.out.println("Liste des commandes pour l'utilisateur connecté : ");
+        System.out.println("Voir la liste des utilisateurs connectés");
+        System.out.println("- /online_users \n");
+
+        /* Commands messages one_to_one*/
+        System.out.println("Demande de chat");
+        System.out.println("- /private_chat \"utilisateur 2\"");
+        System.out.println("Accepter ou refuser la connexion");
+        System.out.println("- /accept \"utilisateur 1\"");
+        System.out.println("- /decline \"utilisateur 1\"");
+        System.out.println("Quitter le chat");
+        System.out.println("- /exit_private_chat \n");
+
+        /* Commandes messages group_chat */
+        System.out.println("Créer un groupe chat");
+        System.out.println("- /create_group \"nom du groupe\"");
+        System.out.println("Rejoindre un groupe chat");
+        System.out.println("- /join_group \"nom du groupe\"");
+        System.out.println("Envoyer un message dans le groupe ");
+        System.out.println("- /msg_group \"nom du groupe\" \"message\"");
+        System.out.println("Quitter un groupe chat");
+        System.out.println("- /exit_group \"nom du groupe\"\n");
+
+        /* Commandes upload/download en UDP*/
+        System.out.println("Upload un fichier");
+        System.out.println("- /upload_file \"chemin_du_fichier\"");
+        System.out.println("Download un fichier");
+        System.out.println("- /download_file \"chemin_du_fichier\"");
+        System.out.println("Lister les fichiers d'une conversation ou groupe");
+        System.out.println("- /list_files \n");
+
+        /* Commandes pour chat securisé dans un groupe*/
+        System.out.println("Créer un groupe sécurisé");
+        System.out.println("- /create_secured_group \"nom_du_group\" \"mot_de_passe\"");
+        System.out.println("Rejoindre un groupe sécurisé");
+        System.out.println("- /join_secured_group \"nom_du_group\" \"mot_de_passe\"\n");
+
+        /* Deconnexion et quitter l'application */
+        System.out.println("Pour se déconnecter");  /* Fonction non demandé dans le sujet*/
+        System.out.println("- /logout ");
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
     }
@@ -63,30 +114,25 @@ public class ConsoleUser {
         boolean isRunning = true;
         ObjectMapper m = new ObjectMapper();
         JsonNode payloadNode = null;
-        String username = "";
-        boolean sessionHasToken;
+        String sub = "";
 
         while (isRunning) {
-            sessionHasToken = !Session.isEmpty() && Session.getData("token") != null;
-            if(sessionHasToken) {
+            if(!Session.isEmpty() && Session.getData("token") != null) {
                 try {
                     payloadNode = m.readTree(decodeJWT(
                         (String)Session
                         .getData("token"))
                         .get("payload")
                         .asText());
-                    username = payloadNode.get("sub").asText();
+                    sub = payloadNode.get("sub").asText();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } 
-            else {
-                username = "";
             }
 
             System.out.printf(
                 "[ %s ] > ", 
-                username == "" ? "Invité" : username
+                sub == "" ? "Invité" : sub
             );
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
@@ -98,30 +144,16 @@ public class ConsoleUser {
                     handleRegister(commandSplit, choiceCommand);
                     break;
                 case "/login":
-                    handleLogin(commandSplit, choiceCommand);
+                    if (handleLogin(commandSplit, choiceCommand)){
+                        loggedUserInstruction();
+                        loggedUserConsole();
+                    }
                     break;
                 case "/help":
                     help();
                     break;
                 case "/exit":
                     System.exit(0);
-                    break;
-                case "/private_chat":
-                    // Vérification de connexion
-                    if(!sessionHasToken) {
-                        System.out.println("Commande indisponible. Veuillez vous connecter.");
-                        break;
-                    }
-                    handlePrivateChat(commandSplit, choiceCommand);
-                    break;
-                case "/logout":
-                    // Vérification de connexion
-                    if(!sessionHasToken) {
-                        System.out.println("Commande indisponible. Veuillez vous connecter.");
-                        break;
-                    }
-                    handleLogout(commandSplit, choiceCommand);
-                    // System.out.println("Vous vous êtes déconnecté avec succès.");
                     break;
                 /*
                 case "/accept":
@@ -157,7 +189,8 @@ public class ConsoleUser {
         }
     }
 
-    public void handleLogin(String[] commands, String choiceCommand) {
+    public boolean handleLogin(String[] commands, String choiceCommand) {
+        boolean state = false;
         try{
             if(commands.length == 3) {
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
@@ -182,9 +215,12 @@ public class ConsoleUser {
                 }
                 
                 System.out.println(res.getMessage());
+                state = true;
+                return state;
             }
             else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
+                return state;
             }
         } catch (Exception e){
             String exception = e.getMessage().substring(7);
@@ -198,33 +234,7 @@ public class ConsoleUser {
             }
             System.out.println(errorMessage);
         }
-    }
-
-    public void handleLogout(String[] commands, String choiceCommand) {
-        try {
-            if(commands.length == 1) {
-                ObjectMapper m = new ObjectMapper();
-                String username = m.readTree(decodeJWT(
-                        (String)Session
-                        .getData("token"))
-                        .get("payload")
-                        .asText()).get("sub").asText();
-                ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
-
-                if(res.getStatus() == 200) {
-                    Session.deleteData("token");
-                }
-                else {
-                    System.out.println("Erreur: La déconnexion à échouée");
-                    return;
-                }
-
-                System.out.println(res.getMessage());
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+        return state;
     }
 
     public void handlePrivateChat(String []commands, String choiceCommand){
@@ -261,4 +271,60 @@ public class ConsoleUser {
         // System.out.println(jsonNode);
         return jsonNode;
     }
+    public void loggedUserConsole(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Veuillez entrer votre commande!");
+
+        boolean isRunning = true;
+        ObjectMapper m = new ObjectMapper();
+        JsonNode payloadNode = null;
+        String sub = "";
+
+        while (isRunning) {
+            if(!Session.isEmpty() && Session.getData("token") != null) {
+                try {
+                    payloadNode = m.readTree(decodeJWT(
+                            (String)Session
+                                    .getData("token"))
+                            .get("payload")
+                            .asText());
+                    sub = payloadNode.get("sub").asText();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.printf(
+                    "[ %s ] > ",
+                    sub == "" ? "Invité" : sub
+            );
+            String command = scanner.nextLine();
+            String[] commandSplit = command.split(" ");
+            String choiceCommand = commandSplit[0];
+
+            switch (choiceCommand) {
+                case "/online_users":
+                    /* handleOnlineUsers() */
+                    break;
+                case "/private_chat":
+                    /*handlePrivate_Chat(commandSplit, choiceCommand);*/
+                    break;
+                case "/accept":
+                    /* handleAccept() */
+                    break;
+                case "/decline":
+                    help();
+                    break;
+                case "exit_private_chat":
+                    /* handleExitPrivateChat() */
+                    break;
+                case "/help":
+                    help_forLoggedUser();
+                    break;
+                default:
+                    System.out.println("Commande non reconnue par le système !");
+                    break;
+            }
+    }
+}
 }

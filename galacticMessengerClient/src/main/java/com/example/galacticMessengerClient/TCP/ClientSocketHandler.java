@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.Handlers;
+package com.example.galacticMessengerClient.TCP;
 
 //import lombok.extern.log4j.Log4j2;
 import org.springframework.integration.annotation.MessageEndpoint;
