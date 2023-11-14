@@ -63,25 +63,30 @@ public class ConsoleUser {
         boolean isRunning = true;
         ObjectMapper m = new ObjectMapper();
         JsonNode payloadNode = null;
-        String sub = "";
+        String username = "";
+        boolean sessionHasToken;
 
         while (isRunning) {
-            if(!Session.isEmpty() && Session.getData("token") != null) {
+            sessionHasToken = !Session.isEmpty() && Session.getData("token") != null;
+            if(sessionHasToken) {
                 try {
                     payloadNode = m.readTree(decodeJWT(
                         (String)Session
                         .getData("token"))
                         .get("payload")
                         .asText());
-                    sub = payloadNode.get("sub").asText();
+                    username = payloadNode.get("sub").asText();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } 
+            else {
+                username = "";
             }
 
             System.out.printf(
                 "[ %s ] > ", 
-                sub == "" ? "Invité" : sub
+                username == "" ? "Invité" : username
             );
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
@@ -102,7 +107,22 @@ public class ConsoleUser {
                     System.exit(0);
                     break;
                 case "/private_chat":
+                    // Vérification de connexion
+                    if(!sessionHasToken) {
+                        System.out.println("Commande indisponible. Veuillez vous connecter.");
+                        break;
+                    }
                     handlePrivateChat(commandSplit, choiceCommand);
+                    break;
+                case "/logout":
+                    // Vérification de connexion
+                    if(!sessionHasToken) {
+                        System.out.println("Commande indisponible. Veuillez vous connecter.");
+                        break;
+                    }
+                    handleLogout(commandSplit, choiceCommand);
+                    // System.out.println("Vous vous êtes déconnecté avec succès.");
+                    break;
                 /*
                 case "/accept":
                     handleAccept(commandSplit, choiceCommand);
@@ -177,6 +197,33 @@ public class ConsoleUser {
                 e.printStackTrace();
             }
             System.out.println(errorMessage);
+        }
+    }
+
+    public void handleLogout(String[] commands, String choiceCommand) {
+        try {
+            if(commands.length == 1) {
+                ObjectMapper m = new ObjectMapper();
+                String username = m.readTree(decodeJWT(
+                        (String)Session
+                        .getData("token"))
+                        .get("payload")
+                        .asText()).get("sub").asText();
+                ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
+
+                if(res.getStatus() == 200) {
+                    Session.deleteData("token");
+                }
+                else {
+                    System.out.println("Erreur: La déconnexion à échouée");
+                    return;
+                }
+
+                System.out.println(res.getMessage());
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
