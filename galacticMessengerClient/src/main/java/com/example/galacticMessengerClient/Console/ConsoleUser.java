@@ -45,34 +45,9 @@ public class ConsoleUser {
         System.out.println("==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================");
-        System.out.println("Vous etês connectés\n");
-        System.out.println("Voici les commandes pour utilisateur connecté:\n");
+        System.out.println("Félicitations, vous etês connectés\n");
+        System.out.println("Entrer /help pour voir toutes les commandes disponible\n");
 
-        System.out.println("Chat one_to_one");
-        System.out.println("- /private_chat \"utilisateur 2\"\t Nouveau chat one_to_one");
-        System.out.println("- /accept \"utilisateur 2\"\t Accepter la demande");
-        System.out.println("- /decline \"utilisateur 2\"\t Refuser la demande");
-        System.out.println("- /help\t Demander de l'aide");
-        System.out.println("- /exit_private_chat \t Pour quitter le chat\n");
-
-        System.out.println("Chat de groupe");
-        System.out.println("- /create_group \"nom du groupe\"\t Créer un groupe chat");
-        System.out.println("- /join_group \"nom du groupe\"\t Rejoindre un groupe chat");
-        System.out.println("- /msg_group \"nom du groupe\" \"message\"\t Envoyer un message dans le groupe");
-        System.out.println("- /exit_group \"nom du groupe\"\t Quitter un groupe chat\n");
-
-        System.out.println("Envoi et réception de fichiers");
-        System.out.println("- /upload_file \"chemin_du_fichier\"\t Upload un fichier");
-        System.out.println("- /download_file \"chemin_du_fichier\"\t Download un fichier");
-        System.out.println("- /list_files \t Lister les fichiers d'une conversation ou groupe\n");
-
-        System.out.println("Groupe sécurisé");
-        System.out.println("- /create_secured_group \"nom_du_group\" \"mot_de_passe\"\t Créer un groupe sécurisé\" ");
-        System.out.println("- /join_secured_group \"nom_du_group\" \"mot_de_passe\"\t Rejoindre un groupe sécurisé\n");
-
-        System.out.println("Deconnexion");
-        System.out.println("- /logout \t Pour se déconnecter");
-        System.out.println("- /exit\t Pour fermer le client");
     }
 
     public static void help() {
@@ -346,13 +321,6 @@ public class ConsoleUser {
                 case "/help":
                     help_forLoggedUser();
                     break;
-                case "/exit":
-                    System.exit(0);
-                    break;
-                /*
-                case "/accept":
-                    handleAccept(commandSplit, choiceCommand);
-                    break;*/
                 default:
                     System.out.println("Commande non reconnue par le système !");
                     break;

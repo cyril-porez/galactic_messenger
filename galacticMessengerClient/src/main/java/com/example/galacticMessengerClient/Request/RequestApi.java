@@ -41,4 +41,14 @@ public class RequestApi {
         String url = String.format("http://%s/api/user/%s", addressIp, command);
         return restTemplate.postForObject(url, req, ApiResponse.class, map);
     }
+    /*
+    public ApiResponse requestOnlineUsers(String command, String addressIp){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        String url = String.format("http://%s/api/user/%s", addressIp, command);
+
+
+    }*/
 }

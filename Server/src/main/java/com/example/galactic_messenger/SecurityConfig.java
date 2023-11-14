@@ -35,6 +35,7 @@ public class SecurityConfig {
             .requestMatchers("/api/user/private_chat").permitAll()
             .requestMatchers("/api/user/accept").permitAll()
             .requestMatchers("/api/user/decline").permitAll()
+                      .requestMatchers("/api/user/online_users").permitAll()
             .anyRequest().authenticated())
             .headers(headers -> headers.disable());
     
