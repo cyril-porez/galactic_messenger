@@ -1,5 +1,6 @@
 package com.example.galacticMessengerClient;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,18 +12,30 @@ import java.net.*;
 
 @SpringBootApplication
 public class GalacticMessengerClientApplication {
+@Value("${server.address}")
 
     public static void main(String[] args) {
 
         SpringApplication.run(GalacticMessengerClientApplication.class, args);
         try {
-            if (checkArgs(args) && findIPv4(args[0]) && findPort(args[0], Integer.parseInt(args[1]))) {
+            if (checkArgs(args) && isServerAddressValid(args[0]) && findPort(args[0], Integer.parseInt(args[1]))) {
                 ConsoleUser consoleUser = new ConsoleUser(args);
                 consoleUser.displayLaunchInstruction();
                 consoleUser.ConsoleUseGalacticMessenger();
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static boolean isServerAddressValid(String serverAddress) {
+        try {
+            InetAddress server = InetAddress.getByName(serverAddress);
+            return server.isReachable(5000); // Vérifie si l'adresse est atteignable dans un délai de 5 secondes
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("L'addresse saisie est incorrecte.");
+            return false;
         }
     }
 
@@ -40,8 +53,10 @@ public class GalacticMessengerClientApplication {
                 if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
                     String temp = address.toString();
                     String currentIp = temp.replace("/", "");
+                    System.out.println(currentIp);
 
                     if (currentIp.equals(ipToSearch)) {
+                        /*System.out.println(currentIp);*/
                         return true;
                     }
                 }

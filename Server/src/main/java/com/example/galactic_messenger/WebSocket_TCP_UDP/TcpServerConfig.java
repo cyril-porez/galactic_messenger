@@ -22,9 +22,6 @@ public class TcpServerConfig {
     // @Value("${server.port}")
     private int serverPort = 49155;
 
-    //@Value("${server.address")
-    //private String serverAddress;
-
     @MessagingGateway(defaultRequestChannel = "toTcp")
     public interface Gateway {
         void send(String message, @Header(IpHeaders.CONNECTION_ID) String connectionId);
