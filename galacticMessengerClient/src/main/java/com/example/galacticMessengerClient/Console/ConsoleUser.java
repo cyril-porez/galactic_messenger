@@ -129,7 +129,9 @@ public class ConsoleUser {
                             .get("payload")
                             .asText());
                     sub = payloadNode.get("sub").asText();
-                    if (once){ once = loggedUserInstruction(sub);}
+                    if (once) {
+                        once = loggedUserInstruction(sub);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -141,11 +143,15 @@ public class ConsoleUser {
             String[] commandSplit = command.split(" ");
             String choiceCommand = commandSplit[0];
 
-            boolean res = Session.getData("token") == null
-                    ? commandsNotConnected(commandSplit, choiceCommand) : commandsConnected(commandSplit, choiceCommand);
+            if (Session.getData("token") == null) {
+                commandsNotConnected(commandSplit, choiceCommand);
+            } else {
+                commandsConnected(commandSplit, choiceCommand);
             }
-        scanner.close();
+
         }
+        scanner.close();
+    }
 
 
     public boolean commandsNotConnected(String[] commandSplit, String choiceCommand){
