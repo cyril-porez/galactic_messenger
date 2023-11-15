@@ -135,6 +135,8 @@ public class ConsoleUser {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else{
+                sub = "";
             }
 
             System.out.printf("[ %s ] > ", sub == "" ? "Invité" : sub);
@@ -148,7 +150,6 @@ public class ConsoleUser {
             } else {
                 commandsConnected(commandSplit, choiceCommand);
             }
-
         }
         scanner.close();
     }
@@ -190,6 +191,9 @@ public class ConsoleUser {
             case "/decline":
                 break;
             case "exit_private_chat":
+                break;
+            case "/logout":
+                handleLogout(commandSplit, choiceCommand);
                 break;
             default:
                 System.out.println("Commande non reconnue par le système !");
@@ -258,6 +262,33 @@ public class ConsoleUser {
                 e.printStackTrace();
             }
             System.out.println(errorMessage);
+        }
+    }
+
+    public void handleLogout(String[] commands, String choiceCommand) {
+        try {
+            if(commands.length == 1) {
+                ObjectMapper m = new ObjectMapper();
+                String username = m.readTree(decodeJWT(
+                        (String)Session
+                        .getData("token"))
+                        .get("payload")
+                        .asText()).get("sub").asText();
+                ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
+
+                if(res.getStatus() == 200) {
+                    Session.deleteData("token");
+                }
+                else {
+                    System.out.println("Erreur: La déconnexion à échouée");
+                    return;
+                }
+
+                System.out.println(res.getMessage());
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
