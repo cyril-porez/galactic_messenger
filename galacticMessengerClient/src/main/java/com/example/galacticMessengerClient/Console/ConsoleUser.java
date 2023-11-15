@@ -154,7 +154,7 @@ public class ConsoleUser {
     }
 
 
-    public boolean commandsNotConnected(String[] commandSplit, String choiceCommand){
+    public void commandsNotConnected(String[] commandSplit, String choiceCommand){
         //Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/register":
@@ -173,9 +173,8 @@ public class ConsoleUser {
                 System.out.println("Commande non reconnue par le système !");
                 break;
         }
-        return false;
     }
-    public boolean commandsConnected(String[] commandSplit, String choiceCommand){
+    public void commandsConnected(String[] commandSplit, String choiceCommand){
         //Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
@@ -196,7 +195,6 @@ public class ConsoleUser {
                 System.out.println("Commande non reconnue par le système !");
                 break;
         }
-        return true;
     }
 
     public void handleRegister(String[] commands, String choiceCommand) {
