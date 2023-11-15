@@ -32,8 +32,8 @@ public class ConsoleUser {
         System.out.println("==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================");
-        System.out.println("Bienvenue sur galactic Messenger.\n");
-        System.out.println("Afin d'utiliser l'application, voici les commandes\n");
+        System.out.println("Bienvenue sur Galactic Messenger.\n");
+        System.out.println("Inscrit toi ou connecte toi à l'application.\n");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
@@ -41,16 +41,17 @@ public class ConsoleUser {
         System.out.println("Demander de l'aide:");
         System.out.println("- /help\n");
     }
-    public void loggedUserInstruction(){
-        System.out.println("==================");
+    public boolean loggedUserInstruction(String name){
+        System.out.println("\n==================");
         System.out.println("GALACTIC MESSENGER");
-        System.out.println("==================");
-        System.out.println("Félicitations, vous etês connecté\n");
-        System.out.println("Entrer /help pour voir toutes les commandes disponible\n");
+        System.out.println("==================\n");
+        System.out.printf("Bienvenue, %s dans le Galactic Messenger !\n", name);
+        System.out.println("Entrer /help pour voir toutes les commandes disponible.\n");
 
+        return false;
     }
 
-    public static void help() {
+    public static boolean help() {
         System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les commandes:");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
@@ -58,9 +59,11 @@ public class ConsoleUser {
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
+
+        return false;
     }
 
-    public static void help_forLoggedUser(){
+    public static boolean help_forLoggedUser(){
         /* Commands liste utilisateurs connectés */
         System.out.println("Liste des commandes pour l'utilisateur connecté : ");
         System.out.println("Voir la liste des utilisateurs connectés");
@@ -104,6 +107,8 @@ public class ConsoleUser {
         System.out.println("- /logout ");
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
+
+        return true;
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -115,58 +120,86 @@ public class ConsoleUser {
         ObjectMapper m = new ObjectMapper();
         JsonNode payloadNode = null;
         String sub = "";
+        boolean once = true;
 
         while (isRunning) {
-            if(!Session.isEmpty() && Session.getData("token") != null) {
+            if (!Session.isEmpty() && Session.getData("token") != null) {
                 try {
                     payloadNode = m.readTree(decodeJWT(
-                        (String)Session
-                        .getData("token"))
-                        .get("payload")
-                        .asText());
+                            (String) Session
+                                    .getData("token"))
+                            .get("payload")
+                            .asText());
                     sub = payloadNode.get("sub").asText();
+                    if (once){ once = loggedUserInstruction(sub);}
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            System.out.printf(
-                "[ %s ] > ", 
-                sub == "" ? "Invité" : sub
-            );
+            System.out.printf("[ %s ] > ", sub == "" ? "Invité" : sub);
+
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
             String choiceCommand = commandSplit[0];
 
-
-            switch (choiceCommand) {
-                case "/register":
-                    handleRegister(commandSplit, choiceCommand);
-                    break;
-                case "/login":
-                    if (handleLogin(commandSplit, choiceCommand)){
-                        loggedUserInstruction();
-                        loggedUserConsole();
-                    }
-                    break;
-                case "/help":
-                    help();
-                    break;
-                case "/exit":
-                    System.exit(0);
-                    break;
-                /*
-                case "/accept":
-                    handleAccept(commandSplit, choiceCommand);
-                    break;*/
-                default:
-                    System.out.println("Commande non reconnue par le système !");
-                    break;
+            boolean res = Session.getData("token") == null
+                    ? commandsForGuest(commandSplit, choiceCommand) : commandsForUser(commandSplit, choiceCommand);
             }
+        scanner.close();
         }
 
-        scanner.close();
+
+    public boolean commandsForGuest(String[] commandSplit, String choiceCommand){
+        //Commande disponibles pour l'invité
+        switch (choiceCommand) {
+            case "/register":
+                handleRegister(commandSplit, choiceCommand);
+                break;
+            case "/login":
+                handleLogin(commandSplit, choiceCommand);
+                break;
+            case "/help":
+                help();
+                break;
+            case "/exit":
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Commande non reconnue par le système !");
+                break;
+        }
+        return false;
     }
+    public boolean commandsForUser(String[] commandSplit, String choiceCommand){
+        //Commande disponibles pour l'invité
+        switch (choiceCommand) {
+            case "/help":
+                help_forLoggedUser();
+                break;
+            case "/online_users":
+                /* handleOnlineUsers() */
+                break;
+            case "/private_chat":
+                /* handlePrivate_Chat */
+                System.out.println("Commande indisponible");
+                break;
+            case "/accept":
+                /* handleAccept(commandSplit, choiceCommand); */
+                break;
+            case "/decline":
+                /* handleDecline(); */
+                break;
+            case "exit_private_chat":
+                /* handleExitPrivateChat() */
+                break;
+            default:
+                System.out.println("Commande non reconnue par le système !");
+                break;
+        }
+        return true;
+    }
+
 
     public void handleRegister(String[] commands, String choiceCommand) {
         try{
@@ -271,60 +304,5 @@ public class ConsoleUser {
         // System.out.println(jsonNode);
         return jsonNode;
     }
-    public void loggedUserConsole(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Veuillez entrer votre commande!");
 
-        boolean isRunning = true;
-        ObjectMapper m = new ObjectMapper();
-        JsonNode payloadNode = null;
-        String sub = "";
-
-        while (isRunning) {
-            if(!Session.isEmpty() && Session.getData("token") != null) {
-                try {
-                    payloadNode = m.readTree(decodeJWT(
-                            (String)Session
-                                    .getData("token"))
-                            .get("payload")
-                            .asText());
-                    sub = payloadNode.get("sub").asText();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            System.out.printf(
-                    "[ %s ] > ",
-                    sub == "" ? "Invité" : sub
-            );
-            String command = scanner.nextLine();
-            String[] commandSplit = command.split(" ");
-            String choiceCommand = commandSplit[0];
-
-            switch (choiceCommand) {
-                case "/online_users":
-                    /* handleOnlineUsers() */
-                    break;
-                case "/private_chat":
-                    /*handlePrivate_Chat(commandSplit, choiceCommand);*/
-                    break;
-                case "/accept":
-                    /* handleAccept() */
-                    break;
-                case "/decline":
-                    help();
-                    break;
-                case "exit_private_chat":
-                    /* handleExitPrivateChat() */
-                    break;
-                case "/help":
-                    help_forLoggedUser();
-                    break;
-                default:
-                    System.out.println("Commande non reconnue par le système !");
-                    break;
-            }
-    }
-}
 }
