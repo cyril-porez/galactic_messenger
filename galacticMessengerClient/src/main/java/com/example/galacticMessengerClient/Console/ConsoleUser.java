@@ -51,7 +51,7 @@ public class ConsoleUser {
         return false;
     }
 
-    public static boolean help() {
+    public static void help() {
         System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les commandes:");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
@@ -60,10 +60,9 @@ public class ConsoleUser {
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
 
-        return false;
     }
 
-    public static boolean help_forLoggedUser(){
+    public static void help_forLoggedUser(){
         /* Commands liste utilisateurs connectés */
         System.out.println("Liste des commandes pour l'utilisateur connecté : ");
         System.out.println("Voir la liste des utilisateurs connectés");
@@ -108,7 +107,6 @@ public class ConsoleUser {
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
 
-        return true;
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -144,13 +142,13 @@ public class ConsoleUser {
             String choiceCommand = commandSplit[0];
 
             boolean res = Session.getData("token") == null
-                    ? commandsForGuest(commandSplit, choiceCommand) : commandsForUser(commandSplit, choiceCommand);
+                    ? commandsNotConnected(commandSplit, choiceCommand) : commandsConnected(commandSplit, choiceCommand);
             }
         scanner.close();
         }
 
 
-    public boolean commandsForGuest(String[] commandSplit, String choiceCommand){
+    public boolean commandsNotConnected(String[] commandSplit, String choiceCommand){
         //Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/register":
@@ -171,27 +169,22 @@ public class ConsoleUser {
         }
         return false;
     }
-    public boolean commandsForUser(String[] commandSplit, String choiceCommand){
+    public boolean commandsConnected(String[] commandSplit, String choiceCommand){
         //Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
                 help_forLoggedUser();
                 break;
             case "/online_users":
-                /* handleOnlineUsers() */
                 break;
             case "/private_chat":
-                /* handlePrivate_Chat */
                 System.out.println("Commande indisponible");
                 break;
             case "/accept":
-                /* handleAccept(commandSplit, choiceCommand); */
                 break;
             case "/decline":
-                /* handleDecline(); */
                 break;
             case "exit_private_chat":
-                /* handleExitPrivateChat() */
                 break;
             default:
                 System.out.println("Commande non reconnue par le système !");
@@ -199,7 +192,6 @@ public class ConsoleUser {
         }
         return true;
     }
-
 
     public void handleRegister(String[] commands, String choiceCommand) {
         try{
@@ -222,8 +214,7 @@ public class ConsoleUser {
         }
     }
 
-    public boolean handleLogin(String[] commands, String choiceCommand) {
-        boolean state = false;
+    public void handleLogin(String[] commands, String choiceCommand) {
         try{
             if(commands.length == 3) {
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
@@ -248,12 +239,9 @@ public class ConsoleUser {
                 }
                 
                 System.out.println(res.getMessage());
-                state = true;
-                return state;
             }
             else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
-                return state;
             }
         } catch (Exception e){
             String exception = e.getMessage().substring(7);
@@ -267,7 +255,6 @@ public class ConsoleUser {
             }
             System.out.println(errorMessage);
         }
-        return state;
     }
 
     public void handlePrivateChat(String []commands, String choiceCommand){
