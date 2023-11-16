@@ -1,17 +1,13 @@
 package com.example.galacticMessengerClient.Console;
 
-import java.util.Objects;
 import java.util.Base64;
 import java.util.Scanner;
 
-import com.example.galacticMessengerClient.TCP.TcpClientConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
@@ -28,7 +24,7 @@ public class ConsoleUser {
         adressServer = addressIp + ":" + port;
     }
 
-    public void displayLaunchInstruction() {
+    public void displayLaunchInstructionNotConnected() {
         System.out.println("==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================");
@@ -42,7 +38,7 @@ public class ConsoleUser {
         System.out.println("- /help\n");
     }
 
-    public boolean loggedUserInstruction(String name) {
+    public boolean displayLaunchInstructionConnected(String name) {
         System.out.println("\n==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================\n");
@@ -52,7 +48,7 @@ public class ConsoleUser {
         return false;
     }
 
-    public static void help() {
+    public static void helpUserNotConnected() {
         System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les commandes:");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
@@ -63,7 +59,7 @@ public class ConsoleUser {
 
     }
 
-    public static void help_forLoggedUser() {
+    public static void helpUserConnected() {
         /* Commands liste utilisateurs connectés */
         System.out.println("Liste des commandes pour l'utilisateur connecté : ");
         System.out.println("Voir la liste des utilisateurs connectés");
@@ -125,7 +121,7 @@ public class ConsoleUser {
                 try {
                     username = getDataFromJWT((String)Session.getData("token"), "sub");
                     if (once) {
-                        once = loggedUserInstruction(username);
+                        once = displayLaunchInstructionConnected(username);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -159,7 +155,7 @@ public class ConsoleUser {
                 handleLogin(commandSplit, choiceCommand);
                 break;
             case "/help":
-                help();
+                helpUserNotConnected();
                 break;
             case "/exit":
                 System.exit(0);
@@ -174,7 +170,7 @@ public class ConsoleUser {
         // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
-                help_forLoggedUser();
+                helpUserConnected();
                 break;
             case "/online_users":
                 break;
@@ -278,41 +274,6 @@ public class ConsoleUser {
             e.printStackTrace();
         }
     }
-
-    public void handlePrivateChat(String[] commands, String choiceCommand) {
-        if (commands.length == 3 && Objects.equals(commands[0], "azerty")) {
-            ApiResponse res = requestApi.requestConnection(commands[0], commands[1], choiceCommand, adressServer);
-            System.out.println(res.getMessage());
-            /*
-             * Logique a implementer ici
-             */
-            TcpClientConfig client1 = new TcpClientConfig();
-            client1.handleReply("Vous et");
-        }
-    }
-
-    public void handleAccept(String[] commands, String choiceCommand) {
-        if (commands.length == 2 && Objects.equals(commands[1], "azerty")) {
-
-            TcpClientConfig clientConfig = new TcpClientConfig();
-            clientConfig.handleReply("Vous et");
-        }
-
-    }
-
-    // private JsonNode decodeJWT(String token) {
-    // String[] chunks = token.split("\\.");
-
-    // ObjectMapper mapper = new ObjectMapper();
-    // ObjectNode jsonNode = mapper.createObjectNode();
-
-    // String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
-
-    // jsonNode.put("payload", payload);
-
-    // // System.out.println(jsonNode);
-    // return jsonNode;
-    // }
 
     public String getDataFromJWT(String jwt, String field) {
         // Divise le JWT

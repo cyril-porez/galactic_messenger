@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.galacticMessengerClient.Console.ConsoleUser;
 
 import java.util.regex.*;
-import java.util.*;
 import java.net.*;
 
 @SpringBootApplication
@@ -20,7 +19,7 @@ public class GalacticMessengerClientApplication {
         try {
             if (checkArgs(args) && isServerAddressValid(args[0]) && findPort(args[0], Integer.parseInt(args[1]))) {
                 ConsoleUser consoleUser = new ConsoleUser(args);
-                consoleUser.displayLaunchInstruction();
+                consoleUser.displayLaunchInstructionNotConnected();
                 consoleUser.ConsoleUseGalacticMessenger();
             }
         } catch (Exception e) {
@@ -37,33 +36,6 @@ public class GalacticMessengerClientApplication {
             System.out.println("L'addresse saisie est incorrecte.");
             return false;
         }
-    }
-
-    private static boolean findIPv4(String ipToSearch) throws SocketException {
-        String ip = null;
-        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-
-        while (interfaces.hasMoreElements() && ip == null) {
-            NetworkInterface ni = interfaces.nextElement();
-            Enumeration<InetAddress> inetAddresses = ni.getInetAddresses();
-
-            while (inetAddresses.hasMoreElements() && ip == null) {
-                InetAddress address = inetAddresses.nextElement();
-
-                if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
-                    String temp = address.toString();
-                    String currentIp = temp.replace("/", "");
-                    System.out.println(currentIp);
-
-                    if (currentIp.equals(ipToSearch)) {
-                        /*System.out.println(currentIp);*/
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     private static boolean findPort(String ip, int port) {
