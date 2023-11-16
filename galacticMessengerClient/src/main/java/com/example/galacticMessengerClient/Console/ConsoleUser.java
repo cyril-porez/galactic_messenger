@@ -1,6 +1,5 @@
 package com.example.galacticMessengerClient.Console;
 
-
 import java.util.Objects;
 import java.util.Base64;
 import java.util.Scanner;
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConsoleUser {
@@ -41,7 +41,8 @@ public class ConsoleUser {
         System.out.println("Demander de l'aide:");
         System.out.println("- /help\n");
     }
-    public boolean loggedUserInstruction(String name){
+
+    public boolean loggedUserInstruction(String name) {
         System.out.println("\n==================");
         System.out.println("GALACTIC MESSENGER");
         System.out.println("==================\n");
@@ -62,13 +63,13 @@ public class ConsoleUser {
 
     }
 
-    public static void help_forLoggedUser(){
+    public static void help_forLoggedUser() {
         /* Commands liste utilisateurs connectés */
         System.out.println("Liste des commandes pour l'utilisateur connecté : ");
         System.out.println("Voir la liste des utilisateurs connectés");
         System.out.println("- /online_users \n");
 
-        /* Commands messages one_to_one*/
+        /* Commands messages one_to_one */
         System.out.println("Demande de chat");
         System.out.println("- /private_chat \"utilisateur 2\"");
         System.out.println("Accepter ou refuser la connexion");
@@ -87,7 +88,7 @@ public class ConsoleUser {
         System.out.println("Quitter un groupe chat");
         System.out.println("- /exit_group \"nom du groupe\"\n");
 
-        /* Commandes upload/download en UDP*/
+        /* Commandes upload/download en UDP */
         System.out.println("Upload un fichier");
         System.out.println("- /upload_file \"chemin_du_fichier\"");
         System.out.println("Download un fichier");
@@ -95,14 +96,14 @@ public class ConsoleUser {
         System.out.println("Lister les fichiers d'une conversation ou groupe");
         System.out.println("- /list_files \n");
 
-        /* Commandes pour chat securisé dans un groupe*/
+        /* Commandes pour chat securisé dans un groupe */
         System.out.println("Créer un groupe sécurisé");
         System.out.println("- /create_secured_group \"nom_du_group\" \"mot_de_passe\"");
         System.out.println("Rejoindre un groupe sécurisé");
         System.out.println("- /join_secured_group \"nom_du_group\" \"mot_de_passe\"\n");
 
         /* Deconnexion et quitter l'application */
-        System.out.println("Pour se déconnecter");  /* Fonction non demandé dans le sujet*/
+        System.out.println("Pour se déconnecter"); /* Fonction non demandé dans le sujet */
         System.out.println("- /logout ");
         System.out.println("Pour fermer le client: ");
         System.out.println("- /exit");
@@ -115,31 +116,25 @@ public class ConsoleUser {
         System.out.println("Veuillez entrer votre commande!");
 
         boolean isRunning = true;
-        ObjectMapper m = new ObjectMapper();
-        JsonNode payloadNode = null;
-        String sub = "";
+        String username = "";
+
         boolean once = true;
 
         while (isRunning) {
             if (!Session.isEmpty() && Session.getData("token") != null) {
                 try {
-                    payloadNode = m.readTree(decodeJWT(
-                            (String) Session
-                                    .getData("token"))
-                            .get("payload")
-                            .asText());
-                    sub = payloadNode.get("sub").asText();
+                    username = getDataFromJWT((String)Session.getData("token"), "sub");
                     if (once) {
-                        once = loggedUserInstruction(sub);
+                        once = loggedUserInstruction(username);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else{
-                sub = "";
+            } else {
+                username = "";
             }
 
-            System.out.printf("[ %s ] > ", sub == "" ? "Invité" : sub);
+            System.out.printf("[ %s ] > ", username == "" ? "Invité" : username);
 
             String command = scanner.nextLine();
             String[] commandSplit = command.split(" ");
@@ -154,9 +149,8 @@ public class ConsoleUser {
         scanner.close();
     }
 
-
-    public void commandsNotConnected(String[] commandSplit, String choiceCommand){
-        //Commande disponibles pour l'invité
+    public void commandsNotConnected(String[] commandSplit, String choiceCommand) {
+        // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/register":
                 handleRegister(commandSplit, choiceCommand);
@@ -175,8 +169,9 @@ public class ConsoleUser {
                 break;
         }
     }
-    public void commandsConnected(String[] commandSplit, String choiceCommand){
-        //Commande disponibles pour l'invité
+
+    public void commandsConnected(String[] commandSplit, String choiceCommand) {
+        // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
                 help_forLoggedUser();
@@ -202,20 +197,20 @@ public class ConsoleUser {
     }
 
     public void handleRegister(String[] commands, String choiceCommand) {
-        try{
-            if(commands.length == 3) {
+        try {
+            if (commands.length == 3) {
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
                 System.out.println(res.getMessage());
 
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             String exception = e.getMessage().substring(7);
             String errorMessage = "";
-            try{
+            try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(exception);
                 errorMessage = jsonNode.get("message").asText();
-            } catch (JsonProcessingException jsonProcessingException){
+            } catch (JsonProcessingException jsonProcessingException) {
                 e.printStackTrace();
             }
             System.out.println(errorMessage);
@@ -223,42 +218,41 @@ public class ConsoleUser {
     }
 
     public void handleLogin(String[] commands, String choiceCommand) {
-        try{
-            if(commands.length == 3) {
+        try {
+            if (commands.length == 3) {
                 ApiResponse res = requestApi.request(commands[1], commands[2], adressServer, choiceCommand);
-            
+
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonData;
                 try {
                     jsonData = mapper.writeValueAsString(res.getData());
                 } catch (JsonProcessingException e) {
-                    jsonData = "{}"; 
+                    jsonData = "{}";
                 }
-                
+
                 try {
                     JsonNode outerNode = mapper.readTree(jsonData);
                     JsonNode node = mapper.readTree(outerNode.asText());
                     String token = node.has("token") ? node.get("token").asText() : "Token inconnu";
 
                     Session.setData("token", token);
-                    
+
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace(); 
+                    e.printStackTrace();
                 }
-                
+
                 System.out.println(res.getMessage());
-            }
-            else {
+            } else {
                 System.out.println("La commande est incorrecte. Entrez '/help' pour voir les différentes commandes.\n");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             String exception = e.getMessage().substring(7);
             String errorMessage = "";
-            try{
+            try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(exception);
                 errorMessage = jsonNode.get("message").asText();
-            } catch (JsonProcessingException jsonProcessingException){
+            } catch (JsonProcessingException jsonProcessingException) {
                 e.printStackTrace();
             }
             System.out.println(errorMessage);
@@ -267,45 +261,38 @@ public class ConsoleUser {
 
     public void handleLogout(String[] commands, String choiceCommand) {
         try {
-            if(commands.length == 1) {
-                ObjectMapper m = new ObjectMapper();
-                String username = m.readTree(decodeJWT(
-                        (String)Session
-                        .getData("token"))
-                        .get("payload")
-                        .asText()).get("sub").asText();
+            if (commands.length == 1) {
+                String username = getDataFromJWT((String) Session.getData("token"), "sub");
                 ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
 
-                if(res.getStatus() == 200) {
+                if (res.getStatus() == 200) {
                     Session.deleteData("token");
-                }
-                else {
+                } else {
                     System.out.println("Erreur: La déconnexion à échouée");
                     return;
                 }
 
                 System.out.println(res.getMessage());
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void handlePrivateChat(String []commands, String choiceCommand){
-        if (commands.length == 3 && Objects.equals(commands[0], "azerty")){
+    public void handlePrivateChat(String[] commands, String choiceCommand) {
+        if (commands.length == 3 && Objects.equals(commands[0], "azerty")) {
             ApiResponse res = requestApi.requestConnection(commands[0], commands[1], choiceCommand, adressServer);
             System.out.println(res.getMessage());
             /*
-                Logique a implementer ici
+             * Logique a implementer ici
              */
             TcpClientConfig client1 = new TcpClientConfig();
             client1.handleReply("Vous et");
         }
     }
 
-    public void handleAccept(String [] commands, String choiceCommand){
-        if (commands.length == 2 && Objects.equals(commands[1], "azerty")){
+    public void handleAccept(String[] commands, String choiceCommand) {
+        if (commands.length == 2 && Objects.equals(commands[1], "azerty")) {
 
             TcpClientConfig clientConfig = new TcpClientConfig();
             clientConfig.handleReply("Vous et");
@@ -313,18 +300,50 @@ public class ConsoleUser {
 
     }
 
-    private JsonNode decodeJWT(String token) {
-        String[] chunks = token.split("\\.");
+    // private JsonNode decodeJWT(String token) {
+    // String[] chunks = token.split("\\.");
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode jsonNode = mapper.createObjectNode();
+    // ObjectMapper mapper = new ObjectMapper();
+    // ObjectNode jsonNode = mapper.createObjectNode();
 
-        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
+    // String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
 
-        jsonNode.put("payload", payload);
-        
-        // System.out.println(jsonNode);
-        return jsonNode;
+    // jsonNode.put("payload", payload);
+
+    // // System.out.println(jsonNode);
+    // return jsonNode;
+    // }
+
+    public String getDataFromJWT(String jwt, String field) {
+        // Divise le JWT
+        String[] parts = jwt.split("\\.");
+        if (parts.length != 3) {
+            System.out.println("Jeton JWT invalide");
+            return null;
+        }
+
+        ObjectMapper m = new ObjectMapper();
+
+        // Analyse les deux premières parties du JWT
+        for (int i = 0; i < 2; i++) {
+            byte[] partBytes = Base64.getUrlDecoder().decode(parts[i]);
+            String part = new String(partBytes);
+
+            JsonNode partNode;
+            try {
+                partNode = m.readTree(part);
+            } catch (Exception e) {
+                System.out.println("Impossible de lire l'arbre du JWT");
+                return null;
+            }
+
+            JsonNode fieldNode = partNode.get(field);
+
+            if (fieldNode != null) {
+                return fieldNode.asText();
+            }
+        }
+
+        return null;
     }
-
 }
