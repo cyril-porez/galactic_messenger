@@ -1,5 +1,5 @@
 # Gradle
-.gradle/
+.gradle
 **/build/
 !src/**/build/
 
@@ -47,5 +47,5 @@ gradle-app.setting
 hs_err_pid*
 replay_pid*
 
-.vscode/
-.idea/
+.vscode
+.idea
