@@ -25,11 +25,13 @@ public class ConsoleUser {
     }
 
     public void displayLaunchInstructionNotConnected() {
-        System.out.println("==================");
-        System.out.println("GALACTIC MESSENGER");
-        System.out.println("==================");
-        System.out.println("Bienvenue sur Galactic Messenger.\n");
-        System.out.println("Inscrit toi ou connecte toi à l'application.\n");
+        System.out.println("\n==================================================");
+        System.out.println("               GALACTIC MESSENGER");
+        System.out.println("==================================================");
+        System.out.println("\nBienvenue sur Galactic Messenger.\n");
+        System.out.println("Afin d'utiliser notre application, veuillez vous");
+        System.out.println("inscrire ou vous connecter, si vous posséder déjà");
+        System.out.println("un compte.\n");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
@@ -39,11 +41,12 @@ public class ConsoleUser {
     }
 
     public boolean displayLaunchInstructionConnected(String name) {
-        System.out.println("\n==================");
-        System.out.println("GALACTIC MESSENGER");
-        System.out.println("==================\n");
+        System.out.println("\n==================================================");
+        System.out.println("               GALACTIC MESSENGER");
+        System.out.println("==================================================");
         System.out.printf("Bienvenue, %s dans le Galactic Messenger !\n", name);
-        System.out.println("Entrer /help pour voir toutes les commandes disponible.\n");
+        System.out.println("Pour vous aider à utiliser le chat, la commande");
+        System.out.println("/help est diponible.\n");
 
         return false;
     }
@@ -114,15 +117,10 @@ public class ConsoleUser {
         boolean isRunning = true;
         String username = "";
 
-        boolean once = true;
-
         while (isRunning) {
             if (!Session.isEmpty() && Session.getData("token") != null) {
                 try {
                     username = getDataFromJWT((String)Session.getData("token"), "sub");
-                    if (once) {
-                        once = displayLaunchInstructionConnected(username);
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -153,11 +151,14 @@ public class ConsoleUser {
                 break;
             case "/login":
                 handleLogin(commandSplit, choiceCommand);
+                String username = getDataFromJWT((String)Session.getData("token"), "sub");
+                displayLaunchInstructionConnected(username);
                 break;
             case "/help":
                 helpUserNotConnected();
                 break;
             case "/exit":
+                System.out.println("Merci d'avoir utilisé GALACTIC MESSENGER");
                 System.exit(0);
                 break;
             default:
@@ -185,6 +186,7 @@ public class ConsoleUser {
                 break;
             case "/logout":
                 handleLogout(commandSplit, choiceCommand);
+                displayLaunchInstructionNotConnected();
                 break;
             default:
                 System.out.println("Commande non reconnue par le système !");
