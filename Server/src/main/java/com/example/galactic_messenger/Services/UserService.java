@@ -11,16 +11,16 @@ import com.example.galactic_messenger.Interfaces.UserRepository;
 import com.example.galactic_messenger.model.Users;
 
 @Service
-public class Test {
+public class UserService {
 
   private UserRepository repo;
 
 
   @Autowired
-  public Test(UserRepository repository){
+  public UserService(UserRepository repository){
     this.repo = repository;
   }
-  public Test() {
+  public UserService() {
 
   }
 
