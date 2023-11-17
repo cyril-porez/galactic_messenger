@@ -18,8 +18,8 @@ Pour savoir si Java est bel et bien installé sur votre machine, ouvrez une term
 Si le terminal vous affiche un message semblable, c'est que Java est correctement installé sur votre ordinateur :
 
 ```
-java 20.0.2 2023-07-18\
-Java(TM) SE Runtime Environment (build 20.0.2+9-78)\
+java 20.0.2 2023-07-18
+Java(TM) SE Runtime Environment (build 20.0.2+9-78)
 Java HotSpot(TM) 64-Bit Server VM (build 20.0.2+9-78, mixed mode, sharing)
 ```
 
@@ -32,15 +32,15 @@ Pour savoir si Gradle est bel et bien installé sur votre machine, ouvrez un ter
 Si le terminal vous affiche un message semblable, c'est que Java est correctement installé sur votre ordinateur :
 
 ```
-------------------------------------------------------------\
-Gradle 8.4\
-------------------------------------------------------------\
-Build time:   2023-10-04 20:52:13 UTC\
-Revision:     e9251e572c9bd1d01e503a0dfdf43aedaeecdc3f\
-Kotlin:       1.9.10\
-Groovy:       3.0.17\
-Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023\
-JVM:          20.0.2 (Oracle Corporation 20.0.2+9-78)\
+------------------------------------------------------------
+Gradle 8.4
+------------------------------------------------------------
+Build time:   2023-10-04 20:52:13 UTC
+Revision:     e9251e572c9bd1d01e503a0dfdf43aedaeecdc3f
+Kotlin:       1.9.10
+Groovy:       3.0.17
+Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          20.0.2 (Oracle Corporation 20.0.2+9-78)
 OS:           Windows 11 10.0 amd64
 ```
 
