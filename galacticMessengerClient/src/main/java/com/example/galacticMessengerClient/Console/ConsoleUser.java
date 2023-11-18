@@ -10,11 +10,11 @@ import com.example.galacticMessengerClient.Services.JwtService;
 public class ConsoleUser {
 
     private UserCommands userCommands;
-    private Authentification handleUsers;
+    private Authentification auth;
     private JwtService jwtService;
 
     public ConsoleUser(String[] args) {
-        handleUsers = new Authentification(args);
+        auth = new Authentification(args);
         userCommands = new UserCommands();
         jwtService = new JwtService();
     }
@@ -57,10 +57,10 @@ public class ConsoleUser {
         // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/register":
-                handleUsers.handleRegister(commandSplit, choiceCommand);
+                auth.handleRegister(commandSplit, choiceCommand);
                 break;
             case "/login":
-                handleUsers.handleLogin(commandSplit, choiceCommand);
+                auth.handleLogin(commandSplit, choiceCommand);
                 String username = jwtService.getDataFromJWT((String)Session.getData("token"), "sub");
                 userCommands.displayLaunchInstructionConnected(username);
                 break;
@@ -95,7 +95,7 @@ public class ConsoleUser {
             case "exit_private_chat":
                 break;
             case "/logout":
-                handleUsers.handleLogout(commandSplit, choiceCommand);
+                auth.handleLogout(commandSplit, choiceCommand);
                 userCommands.displayLaunchInstructionNotConnected();
                 break;
             default:
