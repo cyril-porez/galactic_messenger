@@ -5,17 +5,17 @@ import java.util.Scanner;
 
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Commands.Authentication;
-import com.example.galacticMessengerClient.Commands.UserCommands;
+import com.example.galacticMessengerClient.Commands.ConsoleInstructions;
 import com.example.galacticMessengerClient.Services.JwtService;
 public class ConsoleUser {
 
-    private UserCommands userCommands;
+    private ConsoleInstructions consoleInstructions;
     private Authentication auth;
     private JwtService jwtService;
 
     public ConsoleUser(String[] args) {
         auth = new Authentication(args);
-        userCommands = new UserCommands();
+        consoleInstructions = new ConsoleInstructions();
         jwtService = new JwtService();
     }
 
@@ -62,10 +62,10 @@ public class ConsoleUser {
             case "/login":
                 auth.handleLogin(commandSplit, choiceCommand);
                 String username = jwtService.getDataFromJWT((String)Session.getData("token"), "sub");
-                userCommands.displayLaunchInstructionConnected(username);
+                consoleInstructions.displayLaunchInstructionConnected(username);
                 break;
             case "/help":
-                userCommands.helpUserNotConnected();
+                consoleInstructions.helpUserNotConnected();
                 break;
             case "/exit":
                 System.out.println("Merci d'avoir utilisé GALACTIC MESSENGER");
@@ -81,7 +81,7 @@ public class ConsoleUser {
         // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
-                userCommands.helpUserConnected();
+                consoleInstructions.helpUserConnected();
                 break;
             case "/online_users":
                 break;
@@ -96,7 +96,7 @@ public class ConsoleUser {
                 break;
             case "/logout":
                 auth.handleLogout(commandSplit, choiceCommand);
-                userCommands.displayLaunchInstructionNotConnected();
+                consoleInstructions.displayLaunchInstructionNotConnected();
                 break;
             default:
                 System.out.println("Commande non reconnue par le système !");

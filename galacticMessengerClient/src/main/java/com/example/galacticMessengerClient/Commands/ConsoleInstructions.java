@@ -1,6 +1,6 @@
 package com.example.galacticMessengerClient.Commands;
 
-public class UserCommands {
+public class ConsoleInstructions {
 
     public void displayLaunchInstructionNotConnected() {
         System.out.println("\n==================================================");
