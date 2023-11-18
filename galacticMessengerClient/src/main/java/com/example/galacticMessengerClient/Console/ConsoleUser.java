@@ -4,17 +4,17 @@ import java.util.Scanner;
 
 
 import com.example.galacticMessengerClient.Session;
-import com.example.galacticMessengerClient.Commands.Authentification;
+import com.example.galacticMessengerClient.Commands.Authentication;
 import com.example.galacticMessengerClient.Commands.UserCommands;
 import com.example.galacticMessengerClient.Services.JwtService;
 public class ConsoleUser {
 
     private UserCommands userCommands;
-    private Authentification auth;
+    private Authentication auth;
     private JwtService jwtService;
 
     public ConsoleUser(String[] args) {
-        auth = new Authentification(args);
+        auth = new Authentication(args);
         userCommands = new UserCommands();
         jwtService = new JwtService();
     }

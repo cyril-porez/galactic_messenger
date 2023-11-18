@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Authentification {
+public class Authentication {
 
     String addressIp;
     String port;
@@ -17,7 +17,7 @@ public class Authentification {
     private RequestApi requestApi;
     private JwtService jwtService;
 
-    public Authentification(String[] args){
+    public Authentication(String[] args){
         requestApi = new RequestApi();
         jwtService = new JwtService();
         addressIp = args[0];
