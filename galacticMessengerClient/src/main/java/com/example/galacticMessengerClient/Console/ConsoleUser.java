@@ -2,44 +2,21 @@ package com.example.galacticMessengerClient.Console;
 
 import java.util.Scanner;
 
+
 import com.example.galacticMessengerClient.Session;
-import com.example.galacticMessengerClient.Commands.HandleUsers;
-import com.example.galacticMessengerClient.Commands.Help;
+import com.example.galacticMessengerClient.Commands.Authentification;
+import com.example.galacticMessengerClient.Commands.UserCommands;
+import com.example.galacticMessengerClient.Services.JwtService;
 public class ConsoleUser {
 
-    private Help help;
-    private HandleUsers handleUsers;
+    private UserCommands userCommands;
+    private Authentification handleUsers;
+    private JwtService jwtService;
 
     public ConsoleUser(String[] args) {
-        handleUsers = new HandleUsers(args);
-        help = new Help();
-    }
-
-    public void displayLaunchInstructionNotConnected() {
-        System.out.println("\n==================================================");
-        System.out.println("               GALACTIC MESSENGER");
-        System.out.println("==================================================");
-        System.out.println("\nBienvenue sur Galactic Messenger.\n");
-        System.out.println("Afin d'utiliser notre application, veuillez vous");
-        System.out.println("inscrire ou vous connecter, si vous posséder déjà");
-        System.out.println("un compte.\n");
-        System.out.println("Inscription:");
-        System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
-        System.out.println("Connexion:");
-        System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
-        System.out.println("Demander de l'aide:");
-        System.out.println("- /help\n");
-    }
-
-    public boolean displayLaunchInstructionConnected(String name) {
-        System.out.println("\n==================================================");
-        System.out.println("               GALACTIC MESSENGER");
-        System.out.println("==================================================");
-        System.out.printf("Bienvenue, %s dans le Galactic Messenger !\n", name);
-        System.out.println("Pour vous aider à utiliser le chat, la commande");
-        System.out.println("/help est diponible.\n");
-
-        return false;
+        handleUsers = new Authentification(args);
+        userCommands = new UserCommands();
+        jwtService = new JwtService();
     }
 
     public void ConsoleUseGalacticMessenger() {
@@ -53,7 +30,7 @@ public class ConsoleUser {
         while (isRunning) {
             if (!Session.isEmpty() && Session.getData("token") != null) {
                 try {
-                    username = handleUsers.getDataFromJWT((String)Session.getData("token"), "sub");
+                    username = jwtService.getDataFromJWT((String)Session.getData("token"), "sub");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -84,11 +61,11 @@ public class ConsoleUser {
                 break;
             case "/login":
                 handleUsers.handleLogin(commandSplit, choiceCommand);
-                String username = handleUsers.getDataFromJWT((String)Session.getData("token"), "sub");
-                displayLaunchInstructionConnected(username);
+                String username = jwtService.getDataFromJWT((String)Session.getData("token"), "sub");
+                userCommands.displayLaunchInstructionConnected(username);
                 break;
             case "/help":
-                help.helpUserNotConnected();
+                userCommands.helpUserNotConnected();
                 break;
             case "/exit":
                 System.out.println("Merci d'avoir utilisé GALACTIC MESSENGER");
@@ -104,7 +81,7 @@ public class ConsoleUser {
         // Commande disponibles pour l'invité
         switch (choiceCommand) {
             case "/help":
-                help.helpUserConnected();
+                userCommands.helpUserConnected();
                 break;
             case "/online_users":
                 break;
@@ -119,7 +96,7 @@ public class ConsoleUser {
                 break;
             case "/logout":
                 handleUsers.handleLogout(commandSplit, choiceCommand);
-                displayLaunchInstructionNotConnected();
+                userCommands.displayLaunchInstructionNotConnected();
                 break;
             default:
                 System.out.println("Commande non reconnue par le système !");

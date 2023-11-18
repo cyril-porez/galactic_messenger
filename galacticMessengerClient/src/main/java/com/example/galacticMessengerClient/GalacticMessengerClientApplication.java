@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.galacticMessengerClient.Commands.UserCommands;
 import com.example.galacticMessengerClient.Console.ConsoleUser;
 
 import java.util.regex.*;
@@ -17,9 +18,10 @@ public class GalacticMessengerClientApplication {
 
         SpringApplication.run(GalacticMessengerClientApplication.class, args);
         try {
+            UserCommands userCommands = new UserCommands();
             if (checkArgs(args) && isServerAddressValid(args[0]) && findPort(args[0], Integer.parseInt(args[1]))) {
                 ConsoleUser consoleUser = new ConsoleUser(args);
-                consoleUser.displayLaunchInstructionNotConnected();
+                userCommands.displayLaunchInstructionNotConnected();
                 consoleUser.ConsoleUseGalacticMessenger();
             }
         } catch (Exception e) {

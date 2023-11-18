@@ -1,7 +1,33 @@
 package com.example.galacticMessengerClient.Commands;
 
-public class Help {
+public class UserCommands {
 
+    public void displayLaunchInstructionNotConnected() {
+        System.out.println("\n==================================================");
+        System.out.println("               GALACTIC MESSENGER");
+        System.out.println("==================================================");
+        System.out.println("\nBienvenue sur Galactic Messenger.\n");
+        System.out.println("Afin d'utiliser notre application, veuillez vous");
+        System.out.println("inscrire ou vous connecter, si vous posséder déjà");
+        System.out.println("un compte.\n");
+        System.out.println("Inscription:");
+        System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
+        System.out.println("Connexion:");
+        System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
+        System.out.println("Demander de l'aide:");
+        System.out.println("- /help\n");
+    }
+
+    public boolean displayLaunchInstructionConnected(String name) {
+        System.out.println("\n==================================================");
+        System.out.println("               GALACTIC MESSENGER");
+        System.out.println("==================================================");
+        System.out.printf("Bienvenue, %s dans le Galactic Messenger !\n", name);
+        System.out.println("Pour vous aider à utiliser le chat, la commande");
+        System.out.println("/help est diponible.\n");
+
+        return false;
+    }
 
     public void helpUserNotConnected() {
         System.out.println("\nAfin de vous aider à utiliser l'application voici la liste de toutes les commandes:\n");

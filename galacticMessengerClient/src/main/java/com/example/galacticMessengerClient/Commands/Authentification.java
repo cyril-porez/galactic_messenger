@@ -1,23 +1,25 @@
 package com.example.galacticMessengerClient.Commands;
 
-import java.util.Base64;
 
 import com.example.galacticMessengerClient.Session;
 import com.example.galacticMessengerClient.Request.RequestApi;
+import com.example.galacticMessengerClient.Services.JwtService;
 import com.example.galacticMessengerClient.controllers.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class HandleUsers {
+public class Authentification {
 
     String addressIp;
     String port;
     private String adressServer;
     private RequestApi requestApi;
+    private JwtService jwtService;
 
-    public HandleUsers(String[] args){
+    public Authentification(String[] args){
         requestApi = new RequestApi();
+        jwtService = new JwtService();
         addressIp = args[0];
         port = args[1];
         adressServer = addressIp + ":" + port;
@@ -89,7 +91,7 @@ public class HandleUsers {
     public void handleLogout(String[] commands, String choiceCommand) {
         try {
             if (commands.length == 1) {
-                String username = getDataFromJWT((String) Session.getData("token"), "sub");
+                String username = jwtService.getDataFromJWT((String) Session.getData("token"), "sub");
                 ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
 
                 if (res.getStatus() == 200) {
@@ -106,36 +108,4 @@ public class HandleUsers {
         }
     }
 
-    public String getDataFromJWT(String jwt, String field) {
-        // Divise le JWT
-        String[] parts = jwt.split("\\.");
-        if (parts.length != 3) {
-            System.out.println("Jeton JWT invalide");
-            return null;
-        }
-
-        ObjectMapper m = new ObjectMapper();
-
-        // Analyse les deux premières parties du JWT
-        for (int i = 0; i < 2; i++) {
-            byte[] partBytes = Base64.getUrlDecoder().decode(parts[i]);
-            String part = new String(partBytes);
-
-            JsonNode partNode;
-            try {
-                partNode = m.readTree(part);
-            } catch (Exception e) {
-                System.out.println("Impossible de lire l'arbre du JWT");
-                return null;
-            }
-
-            JsonNode fieldNode = partNode.get(field);
-
-            if (fieldNode != null) {
-                return fieldNode.asText();
-            }
-        }
-
-        return null;
-    }
 }
