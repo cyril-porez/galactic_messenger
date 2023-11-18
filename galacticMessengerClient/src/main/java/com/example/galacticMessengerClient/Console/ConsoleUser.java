@@ -52,19 +52,19 @@ public class ConsoleUser {
     }
 
     public static void helpUserNotConnected() {
-        System.out.println("Afin de vous aider à utiliser l'application voici la liste de toutes les commandes:");
+        System.out.println("\nAfin de vous aider à utiliser l'application voici la liste de toutes les commandes:\n");
         System.out.println("Inscription:");
         System.out.println("- /register \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Connexion:");
         System.out.println("- /login \"nom_d'utilisateur\" \"mot_de_passe\"");
         System.out.println("Pour fermer le client: ");
-        System.out.println("- /exit");
+        System.out.println("- /exit\n");
 
     }
 
     public static void helpUserConnected() {
         /* Commands liste utilisateurs connectés */
-        System.out.println("Liste des commandes pour l'utilisateur connecté : ");
+        System.out.println("\nVoici la liste des différentes commandes afin de discuter avec les autres utilisateurs\n");
         System.out.println("Voir la liste des utilisateurs connectés");
         System.out.println("- /online_users \n");
 
@@ -105,7 +105,7 @@ public class ConsoleUser {
         System.out.println("Pour se déconnecter"); /* Fonction non demandé dans le sujet */
         System.out.println("- /logout ");
         System.out.println("Pour fermer le client: ");
-        System.out.println("- /exit");
+        System.out.println("- /exit\n");
 
     }
 
