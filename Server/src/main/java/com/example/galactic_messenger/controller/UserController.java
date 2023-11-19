@@ -140,7 +140,9 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@RequestParam String name) {
-        repo.findByName(name).setIsConnected(false);
+        Users user = repo.findByName(name);
+        user.setIsConnected(false);
+        repo.save(user);
 
         ApiResponse response = new ApiResponse();
         response.setStatus(HttpStatus.OK.value());

@@ -92,7 +92,7 @@ public class ConsoleUser {
                 break;
             case "/decline":
                 break;
-            case "exit_private_chat":
+            case "/exit_private_chat":
                 break;
             case "/logout":
                 auth.handleLogout(commandSplit, choiceCommand);
