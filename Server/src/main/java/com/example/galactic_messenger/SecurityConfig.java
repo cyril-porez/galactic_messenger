@@ -33,11 +33,11 @@ public class SecurityConfig {
             .requestMatchers("/api/user/register").anonymous()
             .requestMatchers("/api/user/login").anonymous()
             .requestMatchers("/api/user/exit").anonymous()
-            .requestMatchers("/api/user/logout").permitAll()
-            .requestMatchers("/api/user/private_chat").permitAll()
-            .requestMatchers("/api/user/accept").permitAll()
-            .requestMatchers("/api/user/decline").permitAll()
-            .requestMatchers("/api/user/online_users").permitAll())
+            .requestMatchers("/api/user/logout").authenticated()
+            .requestMatchers("/api/user/private_chat").authenticated()
+            .requestMatchers("/api/user/accept").authenticated()
+            .requestMatchers("/api/user/decline").authenticated()
+            .requestMatchers("/api/user/online_users").authenticated())
             .headers(headers -> headers.disable());
     
     return http.build();
