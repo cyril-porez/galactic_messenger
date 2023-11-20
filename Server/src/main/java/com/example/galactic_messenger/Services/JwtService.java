@@ -2,7 +2,7 @@ package com.example.galactic_messenger.Services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.galactic_messenger.security.MyUserDetails;
+import com.example.galactic_messenger.Security.MyUserDetails;
 
 import java.util.Date;
 

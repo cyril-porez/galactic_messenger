@@ -2,9 +2,9 @@ package com.example.galacticMessengerClient.Commands;
 
 
 import com.example.galacticMessengerClient.Session;
+import com.example.galacticMessengerClient.Controllers.ApiResponse;
 import com.example.galacticMessengerClient.Request.RequestApi;
 import com.example.galacticMessengerClient.Services.JwtService;
-import com.example.galacticMessengerClient.controllers.ApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
