@@ -21,27 +21,27 @@ public class SecurityConfig {
    * @throws Exception
    */
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sessionManagement -> sessionManagement
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .sessionFixation().migrateSession()
               .maximumSessions(1).maxSessionsPreventsLogin(true))
             .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-	          .authorizeHttpRequests(authorize -> authorize
+	        .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/api/user/register").permitAll()
-            .requestMatchers("/api/user/login").permitAll()
-            .requestMatchers("/api/user/logout").permitAll()
-            .requestMatchers("/api/user/private_chat").permitAll()
-            .requestMatchers("/api/user/accept").permitAll()
-            .requestMatchers("/api/user/decline").permitAll()
-                      .requestMatchers("/api/user/online_users").permitAll()
-            .anyRequest().authenticated())
+            .requestMatchers("/api/user/register").anonymous()
+            .requestMatchers("/api/user/login").anonymous()
+            .requestMatchers("/api/user/exit").anonymous()
+            .requestMatchers("/api/user/logout").authenticated()
+            .requestMatchers("/api/user/private_chat").authenticated()
+            .requestMatchers("/api/user/accept").authenticated()
+            .requestMatchers("/api/user/decline").authenticated()
+            .requestMatchers("/api/user/online_users").authenticated()
+            .anyRequest().permitAll())
+            .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
             .headers(headers -> headers.disable());
     
     return http.build();
   }
-
-  
 }
