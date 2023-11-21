@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.controller;
+package com.example.galactic_messenger.Controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
