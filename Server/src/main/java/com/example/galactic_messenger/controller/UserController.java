@@ -2,9 +2,15 @@ package com.example.galactic_messenger.controller;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.example.galactic_messenger.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +30,9 @@ public class UserController {
 
     private Test service;
     private UserRepository repo;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtService jwtService;
@@ -86,11 +95,13 @@ public class UserController {
     @PostMapping("/login")
     public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestParam String name,
             @RequestParam String password) {
+
         return service.userlogin(name, password)
                 .handle((result, ex) -> {
                     ApiResponse response = new ApiResponse();
                     if (result.equals("Vous êtes connectés !")) {
                         try {
+
                             response.setStatus(HttpStatus.OK.value());
                             response.setMessage("Vous vous êtes connecté avec succès !");
     
@@ -99,10 +110,18 @@ public class UserController {
                             repo.save(user);
                             // JSONObject data = new JSONObject();
                             Map<String, Object> data = new HashMap<>();
-    
+
+
                             
                             MyUserDetails userDetails = new MyUserDetails(user.getId(), user.getName());
                             String token = jwtService.generateToken(userDetails);
+
+                            /* Authentication autho = authenticationManager.authenticate(
+                                    new UsernamePasswordAuthenticationToken(
+                                            userDetails.getUsername(), null, null));
+
+                            SecurityContextHolder.getContext().setAuthentication(autho);*/
+
                             data.put("id", user.getId());
                             data.put("name", user.getName());
                             data.put("token", token);
