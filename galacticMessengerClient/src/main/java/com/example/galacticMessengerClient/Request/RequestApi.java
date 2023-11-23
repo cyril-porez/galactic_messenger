@@ -27,13 +27,14 @@ public class RequestApi {
         return restTemplate.postForObject(url, req, ApiResponse.class, map);
     };
 
-    public ApiResponse requestLogout(String username, String command, String addressIp) {
+    public ApiResponse requestLogout(String username, String command, String addressIp, String token) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
 
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("name", username);
+        map.add("token", token);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, httpHeaders);
         String url = String.format("http://%s/api/user/%s", addressIp, command);

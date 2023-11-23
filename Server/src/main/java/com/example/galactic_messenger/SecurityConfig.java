@@ -26,22 +26,29 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .sessionFixation().migrateSession()
-              .maximumSessions(1).maxSessionsPreventsLogin(true))
+              .maximumSessions(1).maxSessionsPreventsLogin(true)
+              
+              )
             .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
 	          .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/api/user/register").anonymous()
             .requestMatchers("/api/user/login").anonymous()
-            .requestMatchers("/api/user/exit").anonymous()
             .requestMatchers("/api/user/logout").authenticated()
             .requestMatchers("/api/user/private_chat").authenticated()
             .requestMatchers("/api/user/accept").authenticated()
             .requestMatchers("/api/user/decline").authenticated()
-            .requestMatchers("/api/user/online_users").authenticated())
+            .requestMatchers("/api/user/online_users").authenticated()
+            )
             .headers(headers -> headers.disable());
     
     return http.build();
   }
+
+  // @Bean
+  // public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+  //   return authenticationConfiguration.getAuthenticationManager();
+  // }
 
   
 }

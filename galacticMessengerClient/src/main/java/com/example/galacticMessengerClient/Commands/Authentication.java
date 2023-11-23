@@ -91,8 +91,9 @@ public class Authentication {
     public void handleLogout(String[] commands, String choiceCommand) {
         try {
             if (commands.length == 1) {
+                String token = Session.getData("token").toString();
                 String username = jwtService.getDataFromJWT((String) Session.getData("token"), "sub");
-                ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer);
+                ApiResponse res = requestApi.requestLogout(username, choiceCommand, adressServer, token);
 
                 if (res.getStatus() == 200) {
                     Session.deleteData("token");
