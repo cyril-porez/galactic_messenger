@@ -37,7 +37,6 @@ public class ConsoleUser {
             } else {
                 username = "";
             }
-
             System.out.printf("[ %s ] > ", username == "" ? "Invité" : username);
 
             String command = scanner.nextLine();
@@ -76,7 +75,6 @@ public class ConsoleUser {
                 break;
         }
     }
-
     public void commandsConnected(String[] commandSplit, String choiceCommand) {
         // Commande disponibles pour l'invité
         switch (choiceCommand) {
