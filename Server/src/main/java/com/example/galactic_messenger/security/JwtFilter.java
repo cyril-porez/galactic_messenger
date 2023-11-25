@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.Security;
+package com.example.galactic_messenger.security;
 
 import java.io.IOException;
 

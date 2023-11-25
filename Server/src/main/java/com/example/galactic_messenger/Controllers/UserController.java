@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.example.galactic_messenger.Interfaces.UserRepository;
-import com.example.galactic_messenger.Security.MyUserDetails;
+import com.example.galactic_messenger.security.MyUserDetails;
 import com.example.galactic_messenger.Services.JwtService;
 import com.example.galactic_messenger.Services.UserService;
-import com.example.galactic_messenger.DTO.Users;
+import com.example.galactic_messenger.dto.Users;
 
 @RequestMapping("/api/user")
 @RestController

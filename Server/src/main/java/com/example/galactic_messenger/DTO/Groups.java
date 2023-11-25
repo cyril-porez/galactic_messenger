@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.DTO;
+package com.example.galactic_messenger.dto;
 
 public class Groups {
     

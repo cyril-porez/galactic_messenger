@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.Security;
+package com.example.galactic_messenger.security;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
