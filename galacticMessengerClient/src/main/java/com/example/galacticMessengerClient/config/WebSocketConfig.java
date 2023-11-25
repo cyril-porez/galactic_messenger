@@ -1,18 +1,12 @@
 package com.example.galacticMessengerClient.config;
 
-import com.example.galacticMessengerClient.Services.WebSocketService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
-import org.springframework.web.socket.client.WebSocketClient;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
+
 
 import java.lang.reflect.Type;
-import java.util.concurrent.ExecutionException;
 
 @Configuration
 public class WebSocketConfig {
@@ -28,7 +22,7 @@ public class WebSocketConfig {
 
       @Override
       public void afterConnected(StompSession session, @NotNull StompHeaders connectedHeaders) {
-        System.out.println("Connected to WebSocket");
+        System.out.println("Connected to WebSocket Server");
         session.subscribe("/topic/messages", new MyStompFrameHandler());
       }
     }

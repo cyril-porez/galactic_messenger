@@ -33,9 +33,9 @@ public class SecurityConfig {
             .requestMatchers("/api/user/register").permitAll()
             .requestMatchers("/api/user/login").permitAll()
             .requestMatchers("/api/user/logout").permitAll()
-            .requestMatchers("/api/user/private_chat").permitAll()
-            .requestMatchers("/api/user/accept").permitAll()
-            .requestMatchers("/api/user/decline").permitAll()
+            .requestMatchers("/api/chat/privateChat").permitAll()
+            .requestMatchers("/api/chat/accept").permitAll()
+            .requestMatchers("/api/chat/decline").permitAll()
                       .requestMatchers("/api/user/online_users").permitAll()
             .anyRequest().authenticated())
             .headers(headers -> headers.disable());
