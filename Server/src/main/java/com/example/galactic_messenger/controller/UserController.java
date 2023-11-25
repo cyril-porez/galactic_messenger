@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -99,7 +102,6 @@ public class UserController {
                     ApiResponse response = new ApiResponse();
                     if (result.equals("Vous êtes connectés !")) {
                         try {
-
                             response.setStatus(HttpStatus.OK.value());
                             response.setMessage("Vous vous êtes connecté avec succès !");
     
@@ -111,14 +113,12 @@ public class UserController {
 
                             MyUserDetails userDetails = new MyUserDetails(user.getId(), user.getName());
                             String token = jwtService.generateToken(userDetails);
+                            System.out.println(token);
 
                             JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
                             authenticationToken.setDetails(userDetails);
 
-                            /*
-                            CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(userDetails);
-                            Authentication autho = authenticationManager.authenticate(customAuthenticationToken);
-                            SecurityContextHolder.getContext().setAuthentication(autho);*/
+                            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                             data.put("id", user.getId());
                             data.put("name", user.getName());
@@ -157,12 +157,16 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@RequestParam String name) {
+
         repo.findByName(name).setIsConnected(false);
+        Authentication context = SecurityContextHolder.getContext().getAuthentication();
+        if (context != null) {
+            ApiResponse response = new ApiResponse();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Vous êtes déconnecté");
 
-        ApiResponse response = new ApiResponse();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Vous êtes déconnecté");
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else return  null;
     }
 }
