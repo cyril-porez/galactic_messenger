@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-  private final String secretKey = "sldfdnsdldsj";
+  private static final String secretKey = "sldfdnsdldsj";
 
-  public String generateToken(MyUserDetails userDetails) {
+  public static String generateToken(MyUserDetails userDetails) {
     long expirationTime = 1000 * 60 * 60;
 
     return JWT.create()
@@ -24,7 +24,7 @@ public class JwtService {
       .sign(Algorithm.HMAC256(secretKey));
   }
 
-  public String[] verifyToken(String token){
+  public static String[] verifyToken(String token){
     DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secretKey))
             .build()
             .verify(token);

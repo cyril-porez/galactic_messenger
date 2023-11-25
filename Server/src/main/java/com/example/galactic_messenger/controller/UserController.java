@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -156,7 +157,16 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(@RequestParam String name) {
+    public ResponseEntity<ApiResponse> logout(@RequestHeader("Authorization") String authorization) {
+
+        String name = "";
+        String token = "";
+
+        if (authorization != null && authorization.startsWith("Bearer ")){
+            token = authorization.substring(7);
+        }
+
+        name = JwtService.verifyToken(token)[1];   // user name
 
         repo.findByName(name).setIsConnected(false);
         Authentication context = SecurityContextHolder.getContext().getAuthentication();

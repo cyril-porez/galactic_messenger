@@ -1,6 +1,5 @@
 package com.example.galactic_messenger;
 
-import com.example.galactic_messenger.Services.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.galactic_messenger.Services.JwtService;
 import com.example.galactic_messenger.security.JwtFilter;
 
 @Configuration

@@ -1,8 +1,9 @@
 package com.example.galactic_messenger.security;
 
-import com.example.galactic_messenger.Services.JwtService;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
+
+import com.example.galactic_messenger.Services.JwtService;
 
 @Configuration
 public class JwtFilterConfig {
