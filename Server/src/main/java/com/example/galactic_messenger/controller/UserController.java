@@ -2,9 +2,11 @@ package com.example.galactic_messenger.controller;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.example.galactic_messenger.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +30,14 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(Test testService, UserRepository repository) {
+
+    @Autowired
+    public UserController(Test testService, UserRepository repository, AuthenticationManager authenticationManager) {
         this.service = testService;
         this.repo = repository;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
@@ -103,16 +109,16 @@ public class UserController {
                             // JSONObject data = new JSONObject();
                             Map<String, Object> data = new HashMap<>();
 
-
-                            
                             MyUserDetails userDetails = new MyUserDetails(user.getId(), user.getName());
                             String token = jwtService.generateToken(userDetails);
 
-                            //  Authentication autho = authenticationManager.authenticate(
-                            //         new UsernamePasswordAuthenticationToken(
-                            //                 userDetails.getUsername(), null, null));
+                            JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
+                            authenticationToken.setDetails(userDetails);
 
-                            // SecurityContextHolder.getContext().setAuthentication(autho);
+                            /*
+                            CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(userDetails);
+                            Authentication autho = authenticationManager.authenticate(customAuthenticationToken);
+                            SecurityContextHolder.getContext().setAuthentication(autho);*/
 
                             data.put("id", user.getId());
                             data.put("name", user.getName());

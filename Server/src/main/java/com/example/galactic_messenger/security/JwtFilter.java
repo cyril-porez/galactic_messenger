@@ -2,61 +2,53 @@ package com.example.galactic_messenger.security;
 
 import java.io.IOException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.galactic_messenger.Services.JwtService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
   private final String secretKey = "sldfdnsdldsj";
+  private final JwtService jwtService;
+
+  public JwtFilter(JwtService jwtService) {
+    this.jwtService = jwtService;
+  }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-      throws IOException, ServletException {
+  protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain)
+          throws ServletException, IOException {
 
-    String token = request.getParameter("token");
-    System.out.println(token);
+    String token = getTokenFromRequest(request);
 
+    if (token != null) { // vérifie le token et extrait l'id et l'username
+      String[] data = jwtService.verifyToken(token);
 
-    if (token != null && token.startsWith("Bearer ")) {
-      try {
-        token = token.substring(7);
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secretKey))
-          .build()
-          .verify(token);
+      MyUserDetails userDetails = new MyUserDetails(Long.parseLong(data[0]), data[1]);
+      JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
+      authenticationToken.setDetails(userDetails);
 
-        String userId = decodedJWT.getClaim("userId").asString();
-        System.out.println(userId);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userId,
-                null,
-                null
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        filterChain.doFilter(request, response);
-      } catch (JWTVerificationException e) {
-        throw new ServletException("Token JWT invalid");
-      }
-    } else {
+      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      filterChain.doFilter(request, response);
+    }
+    else{
       filterChain.doFilter(request, response);
     }
   }
+  public String getTokenFromRequest(HttpServletRequest request){
 
-  public String getToken(ServletRequest request){
-    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    String authorizationHeader = httpServletRequest.getHeader("Authorization");
+    // Obtient le token depuis le header http
+    String authorizationHeader = request.getHeader("Authorization");
 
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
       return authorizationHeader.substring(7);
@@ -64,4 +56,5 @@ public class JwtFilter extends GenericFilterBean {
 
     return null;
   }
+
 }
