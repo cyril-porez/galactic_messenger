@@ -1,17 +1,12 @@
 package com.example.galactic_messenger.security;
 
 import java.io.IOException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.galactic_messenger.Services.JwtService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtFilter extends OncePerRequestFilter {
-  private final String secretKey = "sldfdnsdldsj";
   private final JwtService jwtService;
 
   public JwtFilter(JwtService jwtService) {
