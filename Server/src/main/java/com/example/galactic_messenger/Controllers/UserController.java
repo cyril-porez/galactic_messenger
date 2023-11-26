@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.controller;
+package com.example.galactic_messenger.Controllers;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,22 +13,22 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.example.galactic_messenger.Interfaces.UserRepository;
-import com.example.galactic_messenger.Services.JwtService;
-import com.example.galactic_messenger.Services.Test;
-import com.example.galactic_messenger.model.Users;
 import com.example.galactic_messenger.security.MyUserDetails;
+import com.example.galactic_messenger.Services.JwtService;
+import com.example.galactic_messenger.Services.UserService;
+import com.example.galactic_messenger.dto.Users;
 
 @RequestMapping("/api/user")
 @RestController
 public class UserController {
 
-    private Test service;
+    private UserService service;
     private UserRepository repo;
 
     @Autowired
     private JwtService jwtService;
 
-    public UserController(Test testService, UserRepository repository) {
+    public UserController(UserService testService, UserRepository repository) {
         this.service = testService;
         this.repo = repository;
     }
