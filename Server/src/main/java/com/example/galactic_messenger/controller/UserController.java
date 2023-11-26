@@ -6,9 +6,7 @@ import com.example.galactic_messenger.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,20 +26,17 @@ import com.example.galactic_messenger.security.MyUserDetails;
 @RestController
 public class UserController {
 
-    private Test service;
-    private UserRepository repo;
+    private final Test service;
+    private final UserRepository repo;
 
-    @Autowired
-    private JwtService jwtService;
-
-    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
     @Autowired
-    public UserController(Test testService, UserRepository repository, AuthenticationManager authenticationManager) {
+    public UserController(Test testService, UserRepository repository, JwtService jwtService) {
         this.service = testService;
         this.repo = repository;
-        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -114,7 +109,7 @@ public class UserController {
 
                             MyUserDetails userDetails = new MyUserDetails(user.getId(), user.getName());
                             String token = jwtService.generateToken(userDetails);
-                            System.out.println(token);
+                            System.out.println(token); // utilise pour faire des tests
 
                             JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
                             authenticationToken.setDetails(userDetails);
@@ -159,24 +154,30 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@RequestHeader("Authorization") String authorization) {
 
-        String name = "";
-        String token = "";
-
-        if (authorization != null && authorization.startsWith("Bearer ")){
-            token = authorization.substring(7);
-        }
-
-        name = JwtService.verifyToken(token)[1];   // user name
-
-        repo.findByName(name).setIsConnected(false);
+        String name, token = "";
         Authentication context = SecurityContextHolder.getContext().getAuthentication();
-        if (context != null) {
+
+        if (authorization != null && authorization.startsWith("Bearer ") && context != null){
+            token = authorization.substring(7);
+            try {
+                name = JwtService.verifyToken(token)[1];   // user name
+                repo.findByName(name).setIsConnected(false);
+            } catch (Exception e) {
+                ApiResponse errorResponse = new ApiResponse();
+                errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+                errorResponse.setMessage("Token is invalid.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
             ApiResponse response = new ApiResponse();
             response.setStatus(HttpStatus.OK.value());
             response.setMessage("Vous êtes déconnecté");
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        else return  null;
+        else {
+            ApiResponse response = new ApiResponse();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setMessage("Vous n'etes pas autorisé à faire cette requête.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
     }
 }
