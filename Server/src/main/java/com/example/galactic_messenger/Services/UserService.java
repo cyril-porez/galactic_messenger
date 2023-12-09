@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.galactic_messenger.Interfaces.UserRepository;
-import com.example.galactic_messenger.model.Users;
+import com.example.galactic_messenger.dto.Users;
 
 @Service
 public class UserService {

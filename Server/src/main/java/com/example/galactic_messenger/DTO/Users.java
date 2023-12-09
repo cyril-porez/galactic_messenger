@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.model;
+package com.example.galactic_messenger.dto;
 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
