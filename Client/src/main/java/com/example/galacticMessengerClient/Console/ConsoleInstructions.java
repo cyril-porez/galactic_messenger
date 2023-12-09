@@ -22,7 +22,7 @@ public class ConsoleInstructions {
         System.out.println("\n==================================================");
         System.out.println("               GALACTIC MESSENGER");
         System.out.println("==================================================");
-        System.out.printf("Bienvenue, %s dans le Galactic Messenger !\n", name);
+        System.out.printf("\nBienvenue, %s dans le Galactic Messenger !\n", name);
         System.out.println("Pour vous aider à utiliser le chat, la commande");
         System.out.println("/help est diponible.\n");
 
