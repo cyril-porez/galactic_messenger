@@ -14,7 +14,7 @@ public class JwtService {
 
   private static final String secretKey = "sldfdnsdldsj";
 
-  public static String generateToken(MyUserDetails userDetails) {
+  public String generateToken(MyUserDetails userDetails) {
     long expirationTime = 1000 * 60 * 60;
 
     return JWT.create()
