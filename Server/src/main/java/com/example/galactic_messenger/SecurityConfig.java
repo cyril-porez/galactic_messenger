@@ -43,7 +43,7 @@ public class SecurityConfig {
               .requestMatchers("/h2-console/**").permitAll()
               .requestMatchers("/api/user/register").anonymous()
               .requestMatchers("/api/user/login").anonymous()
-              .requestMatchers("/api/user/logout").permitAll()
+              .requestMatchers("/api/user/logout").authenticated()
               .requestMatchers("/api/user/private_chat").authenticated()
               .requestMatchers("/api/user/accept").permitAll()
               .requestMatchers("/api/user/decline").permitAll()
