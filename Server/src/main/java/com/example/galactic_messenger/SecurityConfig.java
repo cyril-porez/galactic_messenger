@@ -39,15 +39,15 @@ public class SecurityConfig {
               .maximumSessions(1).maxSessionsPreventsLogin(true))
             .exceptionHandling((exceptionHandling -> exceptionHandling.authenticationEntryPoint(new CustomAuthEntryPoint(jwtService))))
             .addFilterBefore(new JwtFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
-	          .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/api/user/register").anonymous()
-            .requestMatchers("/api/user/login").anonymous()
-            .requestMatchers("/api/user/logout").permitAll()
-            .requestMatchers("/api/user/private_chat").authenticated()
-            .requestMatchers("/api/user/accept").permitAll()
-            .requestMatchers("/api/user/decline").permitAll()
-            .requestMatchers("/api/user/online_users").permitAll())
+	            .authorizeHttpRequests(authorize -> authorize
+              .requestMatchers("/h2-console/**").permitAll()
+              .requestMatchers("/api/user/register").anonymous()
+              .requestMatchers("/api/user/login").anonymous()
+              .requestMatchers("/api/user/logout").permitAll()
+              .requestMatchers("/api/user/private_chat").authenticated()
+              .requestMatchers("/api/user/accept").permitAll()
+              .requestMatchers("/api/user/decline").permitAll()
+              .requestMatchers("/api/user/online_users").permitAll())
             .headers(headers -> headers.disable());
     
     return http.build();
