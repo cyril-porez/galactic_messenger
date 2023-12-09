@@ -1,4 +1,4 @@
-package com.example.galactic_messenger.controller;
+package com.example.galactic_messenger.Controllers;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.PostMapping;
