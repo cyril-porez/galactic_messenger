@@ -1,34 +1,36 @@
-package com.example.galactic_messenger.controller;
+package com.example.galactic_messenger.Controllers;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.example.galactic_messenger.security.JwtAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
+import java.util.HashMap;
 
-import com.example.galactic_messenger.Services.Test;
+import com.example.galactic_messenger.Interfaces.UserRepository;
+import com.example.galactic_messenger.security.MyUserDetails;
+import com.example.galactic_messenger.Services.JwtService;
+import com.example.galactic_messenger.Services.UserService;
+import com.example.galactic_messenger.dto.Users;
 
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 public class UserController {
 
-    private final Test service;
-    private final UserRepository repo;
-
-    private final JwtService jwtService;
-
+    private UserService service;
+    private UserRepository repo;
 
     @Autowired
-    public UserController(Test testService, UserRepository repository, JwtService jwtService) {
+    private JwtService jwtService;
+
+    public UserController(UserService testService, UserRepository repository) {
         this.service = testService;
         this.repo = repository;
-        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -84,7 +86,6 @@ public class UserController {
     @PostMapping("/login")
     public CompletableFuture<ResponseEntity<ApiResponse>> login(@RequestParam String name,
             @RequestParam String password) {
-
         return service.userlogin(name, password)
                 .handle((result, ex) -> {
                     ApiResponse response = new ApiResponse();
@@ -98,16 +99,10 @@ public class UserController {
                             repo.save(user);
                             // JSONObject data = new JSONObject();
                             Map<String, Object> data = new HashMap<>();
-
+    
+                            
                             MyUserDetails userDetails = new MyUserDetails(user.getId(), user.getName());
                             String token = jwtService.generateToken(userDetails);
-                            System.out.println(token); // utilise pour faire des tests
-
-                            JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
-                            authenticationToken.setDetails(userDetails);
-
-                            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
                             data.put("id", user.getId());
                             data.put("name", user.getName());
                             data.put("token", token);
@@ -144,32 +139,13 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<ApiResponse> logout(@RequestParam String name) {
+        repo.findByName(name).setIsConnected(false);
 
-        String name, token = "";
-        Authentication context = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse response = new ApiResponse();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Vous êtes déconnecté");
 
-        if (authorization != null && authorization.startsWith("Bearer ") && context != null){
-            token = authorization.substring(7);
-            try {
-                name = JwtService.verifyToken(token)[1];   // user name
-                repo.findByName(name).setIsConnected(false);
-            } catch (Exception e) {
-                ApiResponse errorResponse = new ApiResponse();
-                errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-                errorResponse.setMessage("Token is invalid.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-            }
-            ApiResponse response = new ApiResponse();
-            response.setStatus(HttpStatus.OK.value());
-            response.setMessage("Vous êtes déconnecté");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        }
-        else {
-            ApiResponse response = new ApiResponse();
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setMessage("Vous n'etes pas autorisé à faire cette requête.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
