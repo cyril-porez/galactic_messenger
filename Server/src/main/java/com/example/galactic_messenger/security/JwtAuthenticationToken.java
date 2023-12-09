@@ -2,7 +2,6 @@ package com.example.galactic_messenger.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private final String token;
 

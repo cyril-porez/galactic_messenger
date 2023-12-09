@@ -1,15 +1,15 @@
 package com.example.galactic_messenger;
 
+import com.example.galactic_messenger.security.CustomAuthEntryPoint;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.galactic_messenger.Services.JwtService;
@@ -37,13 +37,14 @@ public class SecurityConfig {
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .sessionFixation().migrateSession()
               .maximumSessions(1).maxSessionsPreventsLogin(true))
+            .exceptionHandling((exceptionHandling -> exceptionHandling.authenticationEntryPoint(new CustomAuthEntryPoint(jwtService))))
             .addFilterBefore(new JwtFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
 	          .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/api/user/register").anonymous()
             .requestMatchers("/api/user/login").anonymous()
             .requestMatchers("/api/user/logout").authenticated()
-            .requestMatchers("/api/user/private_chat").permitAll()
+            .requestMatchers("/api/user/private_chat").authenticated()
             .requestMatchers("/api/user/accept").permitAll()
             .requestMatchers("/api/user/decline").permitAll()
             .requestMatchers("/api/user/online_users").permitAll())
@@ -51,10 +52,20 @@ public class SecurityConfig {
     
     return http.build();
   }
+//
+//    @Bean
+//    public AuthenticationEntryPoint authenticationEntryPoint() {
+//        return (request, response, authException) -> {
+//            if (request.getHeader("Authorization") == null){
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+//            }
+//        };
+//    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-      return authenticationConfiguration.getAuthenticationManager();
- }
-
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+        };
+    }
 }

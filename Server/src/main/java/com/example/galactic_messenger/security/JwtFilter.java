@@ -21,7 +21,7 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain)
+  protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain)
           throws ServletException, IOException {
 
     String token = getTokenFromRequest(request);
@@ -48,8 +48,6 @@ public class JwtFilter extends OncePerRequestFilter {
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
       return authorizationHeader.substring(7);
     }
-
     return null;
   }
-
 }
