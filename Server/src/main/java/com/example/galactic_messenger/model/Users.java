@@ -13,6 +13,9 @@ public class Users {
   private long id;
   public String name;
   public String password;
+  
+  private boolean isConnected;
+  
 
   public Users(String name, String password) {
     this.name = name;
@@ -22,7 +25,6 @@ public class Users {
   public Users() {
 
   }
-
 
   public Long getId() {
     return id;
@@ -44,4 +46,11 @@ public class Users {
     this.password = password;
   }
   
+  public boolean getIsConnected() {
+    return this.isConnected;
+  }
+
+  public void setIsConnected(boolean isConnected) {
+    this.isConnected = isConnected;
+  }
 }

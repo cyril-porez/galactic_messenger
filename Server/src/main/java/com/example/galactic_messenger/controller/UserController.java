@@ -1,8 +1,12 @@
 package com.example.galactic_messenger.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.example.galactic_messenger.security.JwtAuthenticationToken;
+import com.example.galactic_messenger.security.MyUserDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,22 +15,26 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.example.galactic_messenger.Services.Test;
+import com.example.galactic_messenger.Controllers.ApiResponse;
+import com.example.galactic_messenger.Interfaces.UserRepository;
+import com.example.galactic_messenger.Services.JwtService;
+import com.example.galactic_messenger.Services.UserService;
+import com.example.galactic_messenger.model.Users;
 
 @RequestMapping("/user")
 @RestController
 public class UserController {
 
-    private final Test service;
+    private final UserService service;
     private final UserRepository repo;
-
     private final JwtService jwtService;
 
-
     @Autowired
-    public UserController(Test testService, UserRepository repository, JwtService jwtService) {
-        this.service = testService;
+    public UserController(UserService userService, UserRepository repository, JwtService jwtService) {
+        this.service = userService;
         this.repo = repository;
         this.jwtService = jwtService;
     }
@@ -75,7 +83,6 @@ public class UserController {
                     } else {
                         response.setStatus(HttpStatus.NOT_FOUND.value());
                         response.setMessage("test");
-                        // response.setData("test");
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                     }
                 });
