@@ -52,15 +52,7 @@ public class SecurityConfig {
     
     return http.build();
   }
-//
-//    @Bean
-//    public AuthenticationEntryPoint authenticationEntryPoint() {
-//        return (request, response, authException) -> {
-//            if (request.getHeader("Authorization") == null){
-//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-//            }
-//        };
-//    }
+
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
